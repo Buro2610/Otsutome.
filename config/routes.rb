@@ -8,5 +8,11 @@ Rails.application.routes.draw do
   post   "/login",   to: "sessions#create"
   delete "/logout",  to: "sessions#destroy"
   resources :users
+
+  #以下、otsutome.
+
+  get    "/calendar",to: "static_pages#calendar"
+
+
 end
 
