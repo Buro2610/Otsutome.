@@ -1,0 +1,8 @@
+<li id="shift-<%= shift.id %>">
+  <%= link_to gravatar_for(shift.user, size: 50), shift.user %>
+  <span class="user"><%= link_to shift.user.name, shift.user %></span>
+  <span class="content"><%= shift.otsutome_title %></span>
+  <span class="timestamp">
+    Posted <%= time_ago_in_words(shift.created_at) %> ago.
+  </span>
+</li>

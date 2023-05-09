@@ -75,4 +75,12 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.authenticated?('')
   end
 
+  test "associated shifts should be destroyed" do
+    @user.save
+    @user.shifts.create!(start_time: "2023-05-09 03:51:49", end_time: "2023-05-09 04:51:49", otsutome_title: "kitchen")
+    assert_difference 'Shift.count', -1 do
+      @user.destroy
+    end
+  end
+
 end

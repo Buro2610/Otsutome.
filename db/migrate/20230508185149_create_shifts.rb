@@ -7,5 +7,6 @@ class CreateShifts < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    add_index :shifts, [:user_id, :created_at]
   end
 end

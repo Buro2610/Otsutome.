@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   #以下、otsutome.
 
   get    "/calendar",to: "static_pages#calendar"
+  resources :shifts, except: %i[show]
 
 
 end
