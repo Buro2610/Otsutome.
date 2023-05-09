@@ -18,7 +18,7 @@ class ShiftsController < ApplicationController
     shift = Shift.new(shift_params)
 
     if Shift.save!
-      redirect_to shifts_path, success: "イベントの登録に成功しました"
+      redirect_to shifts_path, success: "シフトの登録に成功しました"
     else
       render :new
     end
@@ -28,7 +28,7 @@ class ShiftsController < ApplicationController
 
   def update
     if @Shift.update!(shift_params)
-      redirect_to shifts_path, success: "イベントの更新に成功しました"
+      redirect_to shifts_path, success: "シフトの更新に成功しました"
     else
       render :edit
     end
@@ -37,7 +37,7 @@ class ShiftsController < ApplicationController
   def destroy
     @Shift.destroy
 
-    redirect_to shifts_path, success: "イベントの削除に成功しました"
+    redirect_to shifts_path, success: "シフトの削除に成功しました"
   end
 
   private

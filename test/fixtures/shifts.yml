@@ -28,3 +28,12 @@ most_recent:
   start_time: <%= Time.zone.now %>
   end_time: <%= Time.zone.now + 1.hour %>
   user: michael
+
+<% 30.times do |n| %>
+micropost_<%= n %>:
+  otsutome_title: <%= Faker::Lorem.sentence(word_count: 5) %>
+  created_at: <%= 42.days.ago %>
+  start_time: "2023-05-09 03:51:49"
+  end_time: "2023-05-09 04:51:49"
+  user: michael
+<% end %>

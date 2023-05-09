@@ -20,6 +20,6 @@ end
 # ユーザーの一部を対象にマイクロポストを生成する
 users = User.order(:created_at).take(6)
 19.times do
-  random = Faker::Lorem.sentence(word_count: 5)
+  random = Faker::Lorem.sentence(word_count: 2)
   users.each { |user| user.shifts.create!( start_time: "2023-05-09 03:51:49", end_time: "2023-05-09 04:51:49", otsutome_title: random) }
 end
