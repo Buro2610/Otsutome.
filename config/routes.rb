@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get    "/calendar",to: "static_pages#calendar"
 
   resources :shifts,   only: [:create, :destroy]
+  get '/shifts', to: 'static_pages#home'
 
 
 end

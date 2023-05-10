@@ -1,24 +1,38 @@
 class ShiftsController < ApplicationController
 
 before_action :logged_in_user, only: [:create, :destroy]
+before_action :correct_user,   only: :destroy
 
   def create
     @shift = current_user.shifts.build(shift_params)
     if @shift.save
-      flash[:success] = "Shift created!"
+      flash[:success] = "シフトを作成しました！"
       redirect_to root_url
     else
+      @feed_items = current_user.feed.paginate(page: params[:page])
       render 'static_pages/home', status: :unprocessable_entity
     end
   end
 
   def destroy
+    @shift.destroy
+    flash[:success] = "シフトを削除しました"
+    if request.referrer.nil?
+      redirect_to root_url, status: :see_other
+    else
+      redirect_to request.referrer, status: :see_other
+    end
   end
 
   private
 
   def shift_params
-    params.require(:shift).permit(:otsutome_title)
+    params.require(:shift).permit(:otsutome_title, :start_time, :end_time)
+  end
+
+  def correct_user
+    @shift = current_user.shifts.find_by(id: params[:id])
+    redirect_to root_url, status: :see_other if @shift.nil?
   end
 
 end

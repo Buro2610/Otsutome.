@@ -8,5 +8,9 @@
   </span>
   <span class="timestamp">
     Posted <%= time_ago_in_words(shift.created_at) %> ago.
+    <% if current_user?(shift.user) %>
+      <%= link_to "delete", shift, data: { "turbo-method": :delete,
+                                               turbo_confirm: "You sure?" } %>
+    <% end %>
   </span>
 </li>

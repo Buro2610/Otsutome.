@@ -1,7 +1,12 @@
 class StaticPagesController < ApplicationController
+
   def home
-    @shift = current_user.shifts.build if logged_in?
+    if logged_in?
+      @shift  = current_user.shifts.build
+      @feed_items = current_user.feed.paginate(page: params[:page])
+    end
   end
+
 
   def help
   end
