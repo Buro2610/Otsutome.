@@ -28,6 +28,7 @@ end
 
 group :development do
   gem "web-console", "4.2.0"
+  gem 'i18n_generators'
 end
 
 group :test do

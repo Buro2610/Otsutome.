@@ -21,5 +21,9 @@ end
 users = User.order(:created_at).take(6)
 19.times do
   random = Faker::Lorem.sentence(word_count: 2)
-  users.each { |user| user.shifts.create!( start_time: "2023-05-09 03:51:49", end_time: "2023-05-09 04:51:49", otsutome_title: random) }
+  #ランダムな開始時間を作成
+  datetime_from = DateTime.parse('2023-05-01 00:00:00')
+  datetime_to = DateTime.parse('2023-06-30 00:00:00')
+  random_time = rand(datetime_from..datetime_to)
+  users.each { |user| user.shifts.create!( start_time: random_time, end_time: 1.hour.ago(random_time) , otsutome_title: random) }
 end

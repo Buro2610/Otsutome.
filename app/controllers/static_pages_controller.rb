@@ -18,7 +18,10 @@ class StaticPagesController < ApplicationController
   end
 
   def calendar
+    @user = User.find(params[:user_id])
+    @shifts = @user.shifts
   end
+
 
 
 

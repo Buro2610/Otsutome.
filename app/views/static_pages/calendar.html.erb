@@ -1,5 +1,73 @@
-<% provide(:title, "Calendar") %>
+<p id="notice"><%= notice %></p>
 
-<%= month_calendar do |date| %>
-　<%= date.day %>
+<div class="toppage">
+<h1 class="top">カレンダー</h1>
+<br>
+
+<div class="row">
+<div class="col-md-4">
+	<div class="schedule">今後の予定一覧</div>
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th>タイトル</th>
+      <th>日程</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shifts.each do |shift| %>
+      <tr>
+        <td><%= link_to shift.otsutome_title , shift %></td>
+        <td><%= shift.start_time.strftime("%m-%d-%H-%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+<%= form_with(model: @shift, local: true) do |form| %>
+
+  <div class="otsutome_title">
+    <div class="form-tag">タイトル</div>
+    <%= form.text_field :otsutome_title %>
+  </div>
+
+
+  <div class="content">
+    <div class="form-tag">内容</div>
+    <%= form.text_field :content %>
+  </div>
+
+    <div class="time">
+    <div class="form-tag">時間</div>
+    <%= form.datetime_select :start_time %>
+  </div>
+
+ <div class="submit">
+    <%= form.submit %>
+ </div>
 <% end %>
+</div>
+
+<br>
+
+
+<br>
+<div class="col-md-8">
+<%= month_calendar events: @shifts do |date, shifts| %>
+  <%= date.day %>
+
+  <% shifts.each do |shift| %>
+    <div>
+      <%= link_to "#{shift.otsutome_title}（#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")}）", { class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true } %>
+    </div>
+  <% end %>
+<% end %>
+</div>
+</div>
+</div>
+
+
+

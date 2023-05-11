@@ -4,13 +4,14 @@
   <span class="content">
     <%= shift.otsutome_title %>
     <br>
-    <%= shift.start_time %> to <%= shift.end_time %>
+    <%= l shift.start_time %> から <%= l shift.end_time, format: :only_time %>
   </span>
   <span class="timestamp">
-    Posted <%= time_ago_in_words(shift.created_at) %> ago.
+    <%= time_ago_in_words(shift.created_at) %> 前に投稿
     <% if current_user?(shift.user) %>
-      <%= link_to "delete", shift, data: { "turbo-method": :delete,
-                                               turbo_confirm: "You sure?" } %>
+    <body>　</body>
+      <%= link_to "削除", shift, data: { "turbo-method": :delete,
+                                               turbo_confirm: "シフトを削除してもよろしいですか？" } %>
     <% end %>
   </span>
 </li>
