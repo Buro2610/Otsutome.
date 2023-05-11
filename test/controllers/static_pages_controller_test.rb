@@ -26,8 +26,10 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "title", "Contact | Otsutome."
   end
 
+
+
   test "should get calendar" do
-    get calendar_path
+    get calendar_path(users(:michael).id)
     assert_response :success
     assert_select "title", "Calendar | Otsutome."
   end
