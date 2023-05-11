@@ -1,7 +1,19 @@
 <%= form_with(model: @shift) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.text_area :otsutome_title, placeholder: "Compose new micropost..." %>
+    <h3>新規シフト登録</h3>
+
+    <h1>業務内容</h1>
+    <%= f.select :otsutome_title, [["オーダー", "オーダー"], ["キッチン(オーブン)", "キッチン(オーブン)"], ["キッチン(パスタ)", "キッチン(パスタ)"], ["ウォッシャー", "ウォッシャー"]], include_blank: "選択して下さい" %>
+    <h1>開始時刻</h1>
+    <%= f.datetime_select :start_time, minute_step: 10 %>
+    <h1>終了時刻</h1>
+    <%= f.datetime_select :end_time, minute_step: 10 %>
+
   </div>
+
   <%= f.submit "Post", class: "btn btn-primary" %>
 <% end %>
+
+
+

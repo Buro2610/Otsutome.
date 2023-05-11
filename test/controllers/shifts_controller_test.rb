@@ -19,4 +19,16 @@ class ShiftsControllerTest < ActionDispatch::IntegrationTest
     assert_response :see_other
     assert_redirected_to login_url
   end
+
+  test "should redirect destroy for wrong shift" do
+    log_in_as(users(:michael))
+    shift = shifts(:ants)
+    assert_no_difference 'Shift.count' do
+      delete shift_path(shift)
+    end
+    assert_response :see_other
+    assert_redirected_to root_url
+  end
+
+
 end

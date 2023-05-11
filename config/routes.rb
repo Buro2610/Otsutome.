@@ -11,9 +11,10 @@ Rails.application.routes.draw do
 
   #以下、otsutome.
 
-  get    "/calendar",to: "static_pages#calendar"
+  get "/calendar/:user_id", to: "static_pages#calendar", as: 'calendar'
 
   resources :shifts,   only: [:create, :destroy]
+  get '/shifts', to: 'static_pages#home'
 
 
 end
