@@ -50,6 +50,12 @@ tone:
   end_time: <%= Time.zone.now + 1.hour %>
   user: lana
 
+nacchi:
+  otsutome_title: "nacchi"
+  created_at: <%= 1.minutes.ago %>
+  start_time: "2023-05-11 03:51:49"
+  end_time:  "2023-05-11 04:51:49"
+  user: nacchi
 
 
 
@@ -61,3 +67,5 @@ micropost_<%= n %>:
   end_time: "2023-05-09 04:51:49"
   user: michael
 <% end %>
+
+

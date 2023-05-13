@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     if @user.save
       reset_session
       log_in @user
-      flash[:success] = "Welcome to the Sample App!"
+      flash[:success] = "Otsutome. へようこそ！ "
       redirect_to @user   #本当はuser_url(@user)
     else
       render 'new',status: :unprocessable_entity
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User deleted"
+    flash[:success] = "ユーザーを削除しました"
     redirect_to users_url, status: :see_other
   end
 
