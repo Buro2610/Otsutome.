@@ -13,8 +13,9 @@ Rails.application.routes.draw do
 
   get "/calendar/:user_id", to: "static_pages#calendar", as: 'calendar'
 
-  resources :shifts,   only: [:create, :destroy]
+  resources :shifts,   except: %i[show]
   get '/shifts', to: 'static_pages#home'
+
 
 
 end

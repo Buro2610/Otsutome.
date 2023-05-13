@@ -1,5 +1,5 @@
 # メインのサンプルユーザーを1人作成する
-User.create!(name:  "Example User",
+User.create!(name:  "サンプルユーザー(管理人)",
              email: "example@railstutorial.org",
              password:              "foobar",
              password_confirmation: "foobar",
@@ -20,7 +20,7 @@ end
 # ユーザーの一部を対象にマイクロポストを生成する
 users = User.order(:created_at).take(6)
 19.times do
-  random = Faker::Lorem.sentence(word_count: 2)
+  random = Faker::Lorem.sentence(word_count: 1)
   #ランダムな開始時間を作成
   datetime_from = DateTime.parse('2023-05-01 00:00:00')
   datetime_to = DateTime.parse('2023-06-30 00:00:00')
