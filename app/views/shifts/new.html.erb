@@ -1,20 +1,35 @@
-<%= form_with(model: @shift) do |f| %>
-
-  <div class="field">
-    <div class="title">
-      <%= f.label :otsutome_title, "業務内容"%>
-      <%= f.select :otsutome_title, [["オーダー", "オーダー"], ["キッチン(オーブン)", "キッチン(オーブン)"], ["キッチン(パスタ)", "キッチン(パスタ)"], ["ウォッシャー", "ウォッシャー"]], include_blank: "選択して下さい" %>
-    </div>
-
-    <div class="time">
-      <%= f.label :start_time, "開始時刻" %>
-      <%= f.datetime_select :start_time, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10 %>
-    </div>
-
-    <div class="time">
-      <%= f.label :end_time, "終了時刻" %>
-      <%= f.datetime_select :end_time, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10 %>
-    </div>
+<%= form_with(model: @shift, local: true) do |f| %>
+  <table class="table table-borderless">
+    <tr>
+      <td><%= f.label :otsutome_title, "業務内容" %></td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.select :otsutome_title, [["オーダー", "オーダー"], ["キッチン(オーブン)", "キッチン(オーブン)"], ["キッチン(パスタ)", "キッチン(パスタ)"], ["ウォッシャー", "ウォッシャー"]], include_blank: "選択して下さい", class: 'form-control' %>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :start_time, "開始時刻" %></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="datetime_select">
+          <%= raw sprintf(f.datetime_select(:start_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :end_time, "終了時刻" %></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="datetime_select">
+          <%= raw sprintf(f.datetime_select(:end_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <div class="d-flex justify-content-end">
+    <%= f.submit "シフト登録", class: "btn btn-primary" %>
   </div>
-  <%= f.submit "シフト登録", class: "btn btn-primary" %>
 <% end %>
