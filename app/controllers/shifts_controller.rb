@@ -1,13 +1,13 @@
 class ShiftsController < ApplicationController
 
-before_action :logged_in_user, only: [:create, :destroy]
-before_action :correct_user,   only: :destroy
+before_action :logged_in_user, only: [:create, :destroy, :update]
+before_action :correct_user,   only: [:destroy, :update]
 
   def create
     @shift = current_user.shifts.build(shift_params)
     if @shift.save
       flash[:success] = "シフトを作成しました！"
-      redirect_to root_url
+      redirect_to calendar_path(@shift.user)
     else
       @feed_items = current_user.feed.paginate(page: params[:page])
       @default_date = params[:default_date]&.to_date || Date.today
@@ -15,15 +15,20 @@ before_action :correct_user,   only: :destroy
     end
   end
 
-  def destroy
-    @shift.destroy
+def destroy
+  puts "Shift id: #{@shift.id}, User id: #{@shift.user.id}"
+  user_id = @shift.user.id
+  if @shift.destroy
     flash[:success] = "シフトを削除しました"
-    if request.referrer.nil?
-      redirect_to root_url, status: :see_other
-    else
-      redirect_to request.referrer, status: :see_other
-    end
+    puts "Redirecting to calendar_path(#{user_id})"
+    redirect_to calendar_path(user_id), status: :see_other
+  else
+    flash[:danger] = "シフトの削除に失敗しました"
   end
+
+
+end
+
 
   def index
     @shifts = Shift.all
@@ -32,16 +37,19 @@ before_action :correct_user,   only: :destroy
   def new
     @shift = Shift.new
     @default_date = params[:default_date]&.to_date || Date.today
-    puts @default_date
   end
 
-  def edit; end
+  def edit
+    @shift = Shift.find(params[:id])
+    @default_date = params[:default_date]&.to_date || Date.today
+  end
 
   def update
-    if @Shift.update!(shift_params)
-      redirect_to shifts_path, success: "シフトの更新に成功しました"
+    if @shift.update!(shift_params)
+      flash[:success] = "シフトが更新されました！"
+      redirect_to calendar_path(@shift.user)
     else
-      render :edit
+      render 'edit', status: :unprocessable_entity
     end
   end
 

@@ -1,32 +1,47 @@
-<%= form_with model: shift, url: url, local: false do |f| %>
-<%= render 'shared/error_messages', object: f.object %>
+<% provide(:title, "シフト編集") %>
+<%= form_with model: @shift, url: shift_path(@shift), local: true do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <h1>シフトの編集</h1>
 
   <table class="table table-borderless">
     <tr>
-      <td><%= f.label t("activerecord.attributes.Shift.title"), class: "control-label" %></td>
+      <td><%= f.label :otsutome_title, "業務内容" %></td>
     </tr>
     <tr>
-      <td><%= f.text_field :title, class: "form-control" %></td>
-    </tr>
+      <td>
+        <div class="radio-group">
+          <%= f.radio_button :otsutome_title, "オーダー", class: "radio-input" %>
+          <%= f.label :otsutome_title, "オーダー", class: "radio-label" %>
 
+          <%= f.radio_button :otsutome_title, "キッチン(オーブン)", class: "radio-input" %>
+          <%= f.label :otsutome_title, "キッチン(オーブン)", class: "radio-label" %>
+
+          <%= f.radio_button :otsutome_title, "キッチン(パスタ)", class: "radio-input" %>
+          <%= f.label :otsutome_title, "キッチン(パスタ)", class: "radio-label" %>
+
+          <%= f.radio_button :otsutome_title, "ウォッシャー", class: "radio-input" %>
+          <%= f.label :otsutome_title, "ウォッシャー", class: "radio-label" %>
+        </div>
+
+      </td>
+    </tr>
     <tr>
-      <td><%= f.label t("activerecord.attributes.Shift.start_time"), class: "control-label" %></td>
+      <td><%= f.label :start_time, "開始時刻" %></td>
     </tr>
     <tr>
       <td>
         <div class="datetime_select">
-          <%= raw sprintf(f.datetime_select(:start_time, with_css_classes: true, default: default_date, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+          <%= raw sprintf(f.datetime_select(:start_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
         </div>
       </td>
     </tr>
-
     <tr>
-      <td><%= f.label t("activerecord.attributes.Shift.end_time"), class: "control-label" %></td>
+      <td><%= f.label :end_time, "終了時刻" %></td>
     </tr>
     <tr>
       <td>
         <div class="datetime_select">
-          <%= raw sprintf(f.datetime_select(:end_time, with_css_classes: true, default: default_date, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+          <%= raw sprintf(f.datetime_select(:end_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
         </div>
       </td>
     </tr>
@@ -34,8 +49,26 @@
 
   <div class="d-flex justify-content-end">
     <% if action_name == "edit" %>
-      <%= link_to "削除", shift_path(shift), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger me-1" %>
+      <%= link_to "削除", "#", class: "btn btn-danger me-1", id: "delete-btn", data: { url: shift_path(@shift), redirect: calendar_path(@shift.user.id) } %>
     <% end %>
+
+    <script>
+      document.getElementById('delete-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('本当に削除しますか？')) {
+          fetch(e.target.dataset.url, {
+            method: 'DELETE',
+            headers: {
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            }
+          })
+          .then(function() {
+            window.location = e.target.dataset.redirect;
+          });
+        }
+      });
+    </script>
+
 
     <%= f.submit class: "btn btn-success" %>
 <% end %>
