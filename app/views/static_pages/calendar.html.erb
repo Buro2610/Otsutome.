@@ -48,7 +48,7 @@
         </div>
         <% shifts.each do |shift| %>
           <div class="my-1">
-            <%= link_to class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
+            <%= link_to edit_shift_path(shift), class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
               <%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
             <% end %>
           </div>
