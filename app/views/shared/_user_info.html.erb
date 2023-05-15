@@ -2,3 +2,10 @@
 <h1><%= current_user.name %></h1>
 <span><%= link_to "プロフィール", current_user %></span>
 <span><%= link_to "登録済みシフト", calendar_path(current_user) %></span>
+<br>
+<h1>可能業務 一覧</h1>
+<% if current_user.possible_task.present? %>
+  <%= "あります" %>
+<% else %>
+  <%= "あなたはまだ可能業務の登録を行っていません" %>
+<% end %>

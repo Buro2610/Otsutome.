@@ -3,7 +3,7 @@ require "test_helper"
 class ShiftTest < ActiveSupport::TestCase
   def setup
     @user = users(:michael)
-    @shift = @user.shifts.build(start_time: "2023-05-09 03:51:49", end_time: "2023-05-09 04:51:49", otsutome_title: "kitchen")
+    @shift = @user.shifts.build(start_time: "2023-05-09 02:51:49", end_time: "2023-05-09 03:51:49", otsutome_title: "kitchen")
   end
 
   test "should be valid" do
@@ -38,6 +38,11 @@ class ShiftTest < ActiveSupport::TestCase
 
   test "order should be most recent first" do
     assert_equal shifts(:most_recent), Shift.first
+  end
+
+  test "start_time should before at end_time" do
+    @shift.end_time = @shift.start_time-2.hours
+    assert_not @shift.valid?
   end
 
 end

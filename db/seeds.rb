@@ -25,5 +25,5 @@ users = User.order(:created_at).take(6)
   datetime_from = DateTime.parse('2023-05-01 00:00:00')
   datetime_to = DateTime.parse('2023-06-30 00:00:00')
   random_time = rand(datetime_from..datetime_to)
-  users.each { |user| user.shifts.create!( start_time: random_time, end_time: 1.hour.ago(random_time) , otsutome_title: random) }
+  users.each { |user| user.shifts.create!( start_time: 1.hour.ago(random_time), end_time: random_time , otsutome_title: random) }
 end

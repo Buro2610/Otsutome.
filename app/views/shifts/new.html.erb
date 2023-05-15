@@ -1,11 +1,27 @@
 <%= form_with(model: @shift, local: true) do |f| %>
+<%= render 'shared/error_messages', object: f.object %>
+
+
   <table class="table table-borderless">
     <tr>
       <td><%= f.label :otsutome_title, "業務内容" %></td>
     </tr>
     <tr>
       <td>
-        <%= f.select :otsutome_title, [["オーダー", "オーダー"], ["キッチン(オーブン)", "キッチン(オーブン)"], ["キッチン(パスタ)", "キッチン(パスタ)"], ["ウォッシャー", "ウォッシャー"]], include_blank: "選択して下さい", class: 'form-control' %>
+        <div class="radio-group">
+          <%= f.radio_button :otsutome_title, "オーダー", class: "radio-input" %>
+          <%= f.label :otsutome_title, "オーダー", class: "radio-label" %>
+
+          <%= f.radio_button :otsutome_title, "キッチン(オーブン)", class: "radio-input" %>
+          <%= f.label :otsutome_title, "キッチン(オーブン)", class: "radio-label" %>
+
+          <%= f.radio_button :otsutome_title, "キッチン(パスタ)", class: "radio-input" %>
+          <%= f.label :otsutome_title, "キッチン(パスタ)", class: "radio-label" %>
+
+          <%= f.radio_button :otsutome_title, "ウォッシャー", class: "radio-input" %>
+          <%= f.label :otsutome_title, "ウォッシャー", class: "radio-label" %>
+        </div>
+
       </td>
     </tr>
     <tr>

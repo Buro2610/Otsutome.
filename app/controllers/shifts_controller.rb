@@ -10,7 +10,8 @@ before_action :correct_user,   only: :destroy
       redirect_to root_url
     else
       @feed_items = current_user.feed.paginate(page: params[:page])
-      render 'static_pages/home', status: :unprocessable_entity
+      @default_date = params[:default_date]&.to_date || Date.today
+      render 'shifts/new'
     end
   end
 
@@ -48,7 +49,7 @@ before_action :correct_user,   only: :destroy
   private
 
   def shift_params
-    params.require(:shift).permit(:otsutome_title, :start_time, :end_time)
+    params.require(:shift).permit(:otsutome_title, :start_time, :end_time, :possible_task)
   end
 
   def set_shift

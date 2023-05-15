@@ -42,19 +42,22 @@
           <%= date.day %>
           <div class="ms-auto">
             <%= link_to new_shift_path(default_date: date), { class: "btn btn-sm btn-outline-primary fs10", "data-bs-target": "#shiftModal", "data-bs-toggle": "modal", remote: true } do %>
-              <i class="fa fa-calendar-o" aria-hidden="true"></i>
+              <i class="fa fa-calendar-o fa-lg" aria-hidden="true"></i>
             <% end %>
           </div>
         </div>
         <% shifts.each do |shift| %>
           <div class="my-1">
-            <%= link_to "#{shift.otsutome_title}（#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")}）", { class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true } %>
+            <%= link_to class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
+              <%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
+            <% end %>
           </div>
         <% end %>
       <% end %>
 
 
       <%= form_with(model: @shift, local: true) do |form| %>
+
       <h1 class="top">管理者用メニュー</h1>
 
         <div class="otsutome_title">

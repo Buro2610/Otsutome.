@@ -17,7 +17,7 @@ class MicropostsInterfaceTest < MicropostsInterface
 
   test "should show errors but not create shift on invalid submission" do
     assert_no_difference 'Shift.count' do
-      post shifts_path, params: { shift: { otsutome_title: "" } }
+      post shifts_path, params: { shift: { start_time: "", end_time: "", otsutome_title: "" } }
     end
     assert_select 'div#error_explanation'
     assert_select 'a[href=?]', '/?page=2'  # 正しいページネーションリンク
