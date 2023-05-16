@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :show]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
 
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = "プロフィールを更新しました"
       redirect_to @user
     else
       render 'edit', status: :unprocessable_entity
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
 
       def user_params
         params.require(:user).permit(:name, :email, :password,
-                                     :password_confirmation)
+                                     :password_confirmation, :position_title, possible_task:[])
       end
 
     # beforeフィルタ

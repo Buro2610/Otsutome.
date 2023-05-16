@@ -10,19 +10,13 @@
     <tr>
       <td>
         <div class="radio-group">
-          <%= f.radio_button :otsutome_title, "オーダー", class: "radio-input" %>
-          <%= f.label :otsutome_title, "オーダー", class: "radio-label" %>
-
-          <%= f.radio_button :otsutome_title, "キッチン(オーブン)", class: "radio-input" %>
-          <%= f.label :otsutome_title, "キッチン(オーブン)", class: "radio-label" %>
-
-          <%= f.radio_button :otsutome_title, "キッチン(パスタ)", class: "radio-input" %>
-          <%= f.label :otsutome_title, "キッチン(パスタ)", class: "radio-label" %>
-
-          <%= f.radio_button :otsutome_title, "ウォッシャー", class: "radio-input" %>
-          <%= f.label :otsutome_title, "ウォッシャー", class: "radio-label" %>
+          <% ["オーダー", "キッチン(オーブン)", "キッチン(パスタ)", "ウォッシャー"].each do |title| %>
+            <div class="radio">
+              <%= f.radio_button :otsutome_title, title, class: "radio-input" %>
+              <%= f.label :otsutome_title, title, class: "radio-label" %>
+            </div>
+          <% end %>
         </div>
-
       </td>
     </tr>
     <tr>

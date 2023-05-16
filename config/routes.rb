@@ -11,7 +11,9 @@ Rails.application.routes.draw do
 
   #以下、otsutome.
 
+  get "/calendar/admin", to: "static_pages#admincalendar"
   get "/calendar/:user_id", to: "static_pages#calendar", as: 'calendar'
+
 
   resources :shifts,   except: %i[show]
   get '/shifts', to: 'static_pages#home'

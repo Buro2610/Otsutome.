@@ -19,9 +19,9 @@ def destroy
   puts "Shift id: #{@shift.id}, User id: #{@shift.user.id}"
   user_id = @shift.user.id
   if @shift.destroy
-    flash[:success] = "シフトを削除しました"
     puts "Redirecting to calendar_path(#{user_id})"
-    redirect_to calendar_path(user_id), status: :see_other
+    flash[:success] = "シフトを削除しました"
+    redirect_to calendar_path(user_id)
   else
     flash[:danger] = "シフトの削除に失敗しました"
   end

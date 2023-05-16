@@ -19,6 +19,15 @@
       <%= f.label :password_confirmation, "パスワード(再)" %>
       <%= f.password_field :password_confirmation, class: 'form-control' %>
 
+      <%= f.label :possible_task, "可能業務" %>
+      <br><br>
+      <% ["オーダー", "キッチン(オーブン)", "キッチン(パスタ)", "ウォッシャー"].each.with_index do |task,i| %>
+        <div class="checkbox">
+          <%= f.check_box :possible_task, {multiple: true}, task, nil %>
+          <%= f.label :possible_task, task %>
+        </div>
+      <% end %>
+
       <%= f.submit "変更を保存", class: "btn btn-primary" %>
     <% end %>
 

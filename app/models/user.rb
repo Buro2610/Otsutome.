@@ -58,5 +58,7 @@ class User < ApplicationRecord
     Shift.where("user_id = ?", id)
   end
 
+  #possible_taskを配列にする
+  serialize :possible_task, Array
 
 end
