@@ -22,6 +22,11 @@ class StaticPagesController < ApplicationController
     @shifts = @user.shifts
   end
 
+  def admincalendar
+    @users = User.all
+    @allshifts = Shift.all
+  end
+
 
 
 

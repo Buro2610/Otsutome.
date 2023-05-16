@@ -215,13 +215,17 @@ input {
 }
 
 .checkbox {
-  margin-top: -10px;
-  margin-bottom: 10px;
-  span {
-    margin-left: 20px;
-    font-weight: normal;
-  }
+  display: flex;  /* Flexboxを使用してラベルとチェックボックスを並べる */
+  align-items: center; /* 垂直方向の中心に配置 */
+  margin: 10px 0; /* 上と下に10pxのマージンを追加 */
 }
+
+.checkbox label{
+  margin-left: 20px; /* よくわからない */
+}
+
+
+
 
 .table-borderless td {
   border: none;
@@ -253,6 +257,8 @@ input {
   width: auto;
   margin-left: 0;
 }
+
+
 
 /* Dropdown menu */
 
@@ -421,7 +427,7 @@ span.image {
 .ms-auto {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   z-index: 10;
 }
 

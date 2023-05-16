@@ -1,4 +1,4 @@
-<% provide(:title, "Calendar") %>
+<% provide(:title, "AdminCalendar") %>
 
 
 <div class="container">
@@ -17,13 +17,13 @@
       <table class="table">
         <thead class="thead-light">
           <tr>
-            <th>業務タイトル(あいうソート)</th>
-            <th>登録順・開始時刻でソート</th>
+            <th>業務タイトル</th>
+            <th>開始時刻</th>
           </tr>
         </thead>
 
         <tbody>
-          <% @shifts.each do |shift| %>
+          <% @allshifts.each do |shift| %>
             <tr>
               <td>
                 <%= link_to edit_shift_path(shift), romote: true do %>
@@ -41,7 +41,7 @@
 
 
     <div class="col-md-9">
-      <%= month_calendar events: @shifts do |date, shifts| %>
+      <%= month_calendar events: @allshifts do |date, shifts| %>
         <div class="d-flex align-items-center mb-3">
           <%= date.day %>
           <div class="ms-auto">
@@ -54,15 +54,28 @@
           <div class="my-1">
             <% if shift.user.possible_task.include?(shift.otsutome_title) %>
               <%= link_to edit_shift_path(shift), class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
-                <%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
+                <%= "#{shift.user.name}"%><br><%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
               <% end %>
             <% else %>
               <%= link_to edit_shift_path(shift), class: "btn btn-sm btn-danger", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
-                <%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
+                <%= "#{shift.user.name}"%><br><%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
               <% end %>
             <% end %>
           </div>
         <% end %>
+      <% end %>
+
+      <br>
+      <h1 class="top">管理者用メニュー</h1>
+      <%= form_with(model: @allshift, local: true) do |f| %>
+
+        <%= f.label :otsutome_title, "業務タイトル" %>
+        <%= f.text_field :name, class: 'form-control' %>
+
+        <%= f.label :otsutome_content, "業務内容" %>
+        <%= f.email_field :otsutome_content, class: 'form-control' %>
+
+        <%= f.submit "業務を追加", class: "btn btn-primary" %>
       <% end %>
     </div>
   </div>

@@ -1,25 +1,29 @@
 <% provide(:title, @user.name) %>
 <div class="row">
-  <aside class="col-md-4">
+  <aside class="col-md-6">
     <section class="user_info">
       <h1>
         <%= gravatar_for @user, size: 50 %>
         <%= @user.name %>
       </h1>
       <br>
+        <% if current_user.admin? %>
+          <h1>役職 : 管理人</h1>
+        <% else %>
+          <h1>役職 : 従業員</h1>
+        <% end %>
+
+      <br>
       <h1>可能業務</h1>
-      <%=  %>
+        <% if @user.possible_task.present? %>
+          <% @user.possible_task.each do |task| %>
+            ・<%= task %><br>
+          <% end %>
+        <% else %>
+          <%= link_to "可能業務の登録", edit_user_path(@user) %>
+        <% end %>
     </section>
   </aside>
-  <div class="col-md-8">
-    <% if @user.shifts.any? %>
-      <h3>シフト (<%= @user.shifts.count %>)</h3>
-      <ol class="shifts">
-        <%= render @shifts %>
-      </ol>
-      <%= will_paginate @shifts %>
-    <% end %>
-  </div>
 
 
 </div>
