@@ -27,8 +27,4 @@ class StaticPagesController < ApplicationController
     @allshifts = Shift.all
   end
 
-
-
-
-
 end

@@ -1,6 +1,6 @@
 <%= form_with(model: @shift, local: true) do |f| %>
 <%= render 'shared/error_messages', object: f.object %>
-
+  <h1>新規シフト登録</h1>
 
   <table class="table table-borderless">
     <tr>
@@ -9,19 +9,13 @@
     <tr>
       <td>
         <div class="radio-group">
-          <%= f.radio_button :otsutome_title, "オーダー", class: "radio-input" %>
-          <%= f.label :otsutome_title, "オーダー", class: "radio-label" %>
-
-          <%= f.radio_button :otsutome_title, "キッチン(オーブン)", class: "radio-input" %>
-          <%= f.label :otsutome_title, "キッチン(オーブン)", class: "radio-label" %>
-
-          <%= f.radio_button :otsutome_title, "キッチン(パスタ)", class: "radio-input" %>
-          <%= f.label :otsutome_title, "キッチン(パスタ)", class: "radio-label" %>
-
-          <%= f.radio_button :otsutome_title, "ウォッシャー", class: "radio-input" %>
-          <%= f.label :otsutome_title, "ウォッシャー", class: "radio-label" %>
+          <% ["オーダー", "オーブン", "パスタ", "ウォッシャー", "ドリンク"].each do |title| %>
+            <div class="radio">
+              <%= f.radio_button :otsutome_title, title, class: "radio-input" %>
+              <%= f.label :otsutome_title, title, class: "radio-label" %>
+            </div>
+          <% end %>
         </div>
-
       </td>
     </tr>
     <tr>
