@@ -1,5 +1,5 @@
 # メインのサンプルユーザーを1人作成する
-User.create!(name:  "サンプルユーザー(管理人)",
+User.create!(name:  "管理人1",
              email: "example@railstutorial.org",
              password:              "foobar",
              password_confirmation: "foobar",

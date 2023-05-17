@@ -10,7 +10,7 @@
     <tr>
       <td>
         <div class="radio-group">
-          <% ["オーダー", "キッチン(オーブン)", "キッチン(パスタ)", "ウォッシャー"].each do |title| %>
+          <% ["オーダー", "オーブン", "パスタ", "ウォッシャー", "ドリンク"].each do |title| %>
             <div class="radio">
               <%= f.radio_button :otsutome_title, title, class: "radio-input" %>
               <%= f.label :otsutome_title, title, class: "radio-label" %>

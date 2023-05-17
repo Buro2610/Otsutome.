@@ -21,7 +21,7 @@
 
       <%= f.label :possible_task, "可能業務" %>
       <br><br>
-      <% ["オーダー", "キッチン(オーブン)", "キッチン(パスタ)", "ウォッシャー"].each.with_index do |task,i| %>
+      <% ["オーダー", "オーブン", "パスタ", "ウォッシャー", "ドリンク"].each.with_index do |task,i| %>
         <div class="checkbox">
           <%= f.check_box :possible_task, {multiple: true}, task, nil %>
           <%= f.label :possible_task, task %>
