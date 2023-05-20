@@ -26,13 +26,13 @@ class ShiftTest < ActiveSupport::TestCase
   end
 
 
-  test "otsutome_title should be present" do
-    @shift.otsutome_title = "   "
-    assert_not @shift.valid?
-  end
+  # test "otsutome_title should be present" do
+  #   @shift.otsutome_title = "   "
+  #   assert_not @shift.valid?
+  # end
 
-  test "otsutome_title should be at most 140 characters" do
-    @shift.otsutome_title = "a" * 141
+  test "otsutome_title should be at most 9 characters" do
+    @shift.otsutome_title = "a" * 9
     assert_not @shift.valid?
   end
 

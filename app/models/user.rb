@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :tasks  # 一人のユーザーは複数のタスクを持つ
   has_many :shifts, dependent: :destroy
   attr_accessor :remember_token
   before_save { email.downcase! }
@@ -60,5 +61,6 @@ class User < ApplicationRecord
 
   #possible_taskを配列にする
   serialize :possible_task, Array
+
 
 end
