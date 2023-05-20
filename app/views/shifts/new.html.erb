@@ -9,11 +9,16 @@
     <tr>
       <td>
         <div class="radio-group">
-          <% ["オーダー", "オーブン", "パスタ", "ウォッシャー", "ドリンク"].each do |title| %>
-            <div class="radio">
-              <%= f.radio_button :otsutome_title, title, class: "radio-input" %>
-              <%= f.label :otsutome_title, title, class: "radio-label" %>
-            </div>
+          <% if @task_names.present? %>
+            <% @task_names.each do |title| %>
+              <div class="radio">
+                <%= f.radio_button :otsutome_title, title, class: "radio-input" %>
+                <%= f.label :otsutome_title, title, class: "radio-label" %>
+              </div>
+            <% end %>
+          <% else %>
+            シフトの名称が未設定のため、「名称未設定」となります
+            <%= f.hidden_field :otsutome_title, value: "名称未設定" %>
           <% end %>
         </div>
       </td>

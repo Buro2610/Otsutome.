@@ -4,8 +4,9 @@ class Shift < ApplicationRecord
   validates :user_id, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
-  validates :otsutome_title, presence: true, length: { maximum: 140 }
+  validates :otsutome_title, length: { maximum: 8 }
   validate :start_time_before_end_time
+
 
 
   private

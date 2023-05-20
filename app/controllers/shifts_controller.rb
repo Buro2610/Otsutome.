@@ -15,19 +15,17 @@ before_action :correct_user,   only: [:destroy, :update]
     end
   end
 
-def destroy
-  puts "Shift id: #{@shift.id}, User id: #{@shift.user.id}"
-  user_id = @shift.user.id
-  if @shift.destroy
-    puts "Redirecting to calendar_path(#{user_id})"
-    flash[:success] = "シフトを削除しました"
-    redirect_to calendar_path(user_id)
-  else
-    flash[:danger] = "シフトの削除に失敗しました"
+  def destroy
+    puts "Shift id: #{@shift.id}, User id: #{@shift.user.id}"
+    user_id = @shift.user.id
+    if @shift.destroy
+      puts "Redirecting to calendar_path(#{user_id})"
+      flash[:success] = "シフトを削除しました"
+      redirect_to calendar_path(user_id)
+    else
+      flash[:danger] = "シフトの削除に失敗しました"
+    end
   end
-
-
-end
 
 
   def index
@@ -35,11 +33,13 @@ end
   end
 
   def new
+    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
     @shift = Shift.new
     @default_date = params[:default_date]&.to_date || Date.today
   end
 
   def edit
+    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
     @shift = Shift.find(params[:id])
     @default_date = params[:default_date]&.to_date || Date.today
   end
@@ -68,13 +68,12 @@ end
     @shift = current_user.shifts.find_by(id: params[:id])
     redirect_to root_url, status: :see_other if @shift.nil?
   end
-
 end
 
 
 
 
-  # # フラッシュメッセージを Bootstrap 対応させるための設定
+  # フラッシュメッセージを Bootstrap 対応させるための設定
   # add_flash_types :success, :info, :warning, :danger
 
   # before_action :set_shift, only: %i[edit update destroy]

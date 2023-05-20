@@ -1,0 +1,66 @@
+<% provide(:title, "AdminCalendar") %>
+
+<div class="container">
+  <h1 class="top">業務設定</h1>
+
+  <%= form_with(model: @task, local: true, id: 'new_task_form') do |f| %>
+    <%= f.label :name, "業務名" %>
+    <%= f.text_field :name, class: 'form-control' %>
+    <%= f.submit "業務を追加", class: "btn btn-primary" %>
+  <% end %>
+  <ul>
+    <% if @tasks.empty? %>
+      <li>業務が設定されていません</li>
+    <% end %>
+    <% @tasks.each do |task| %>
+      <li>
+        <%= task.name %>
+        <%= link_to "編集", edit_task_path(task) %>
+        <a data-confirm="削除しますか？" rel="nofollow" data-method="delete" href="/tasks/<%= task.id %>" class="delete-btn" data-url="/tasks/<%= task.id %>" data-redirect="/tasks">削除</a>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<script>
+  // Delete handler
+  document.querySelectorAll('.delete-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (confirm('本当に削除しますか？')) {
+        fetch(e.target.dataset.url, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+          }
+        })
+        .then(function() {
+          window.location = e.target.dataset.redirect;
+        });
+      }
+    });
+  });
+
+  // Create handler
+  document.getElementById('new_task_form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Create new task with fetch API
+    fetch(e.target.action, {
+      method: 'POST',
+      body: new FormData(e.target),
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      }
+    })
+    .then(function(response) {
+      if (response.ok) {
+        window.location = '/tasks'; // Redirect to tasks page
+      } else {
+        alert('業務の追加に失敗しました');
+      }
+    });
+  });
+</script>
+
+

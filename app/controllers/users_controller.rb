@@ -29,6 +29,7 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
     @user = User.find(params[:id])
   end
 
@@ -48,6 +49,10 @@ class UsersController < ApplicationController
     flash[:success] = "ユーザーを削除しました"
     redirect_to users_url, status: :see_other
   end
+
+
+
+
 
   private             #private注意！！！！※※※
 
@@ -70,5 +75,7 @@ class UsersController < ApplicationController
     def admin_user
       redirect_to(root_url, status: :see_other) unless current_user.admin?
     end
+
+
 
 end
