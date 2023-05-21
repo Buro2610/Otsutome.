@@ -12,14 +12,15 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
   create_table "preference_levels", force: :cascade do |t|
-    t.string "level"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_preference_levels_on_name", unique: true
   end
 
   create_table "shift_preferences", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.date "date"
+    t.datetime "datetime"
     t.integer "time_slot_id", null: false
     t.integer "preference_level_id", null: false
     t.datetime "created_at", null: false
@@ -54,9 +55,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
   end
 
   create_table "time_slots", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.datetime "start_time", precision: nil, null: false
+    t.datetime "end_time", precision: nil, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_time_slots_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|

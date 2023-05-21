@@ -1,0 +1,42 @@
+<div class="toppage">
+  <h1 class="top">シフト希望カレンダー</h1>
+</div>
+<%= form_with(model: @shift_preference, local: true) do |f| %>
+  <% if @shift_preference.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@shift_preference.errors.count, "error") %> prohibited this shift from being saved:</h2>
+
+      <ul>
+      <% @shift_preference.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <h1>新規シフト希望登録</h1>
+
+  <table class="table table-borderless">
+    <% @time_slots.each_with_index do |time_slot, index| %>
+      <tr>
+        <td><%= f.label :time_slot, "時間割: #{time_slot.name}" %></td>
+        <td>
+          <div class="radio-group">
+            <% @preference_levels.each do |level| %>
+              <div class="radio">
+                <%= f.fields_for "shift_preferences[#{index}]", @shift_preference do |sp| %>
+                  <%= sp.hidden_field :time_slot_id, value: time_slot.id %>
+                  <%= sp.radio_button :preference_level_id, level.id, class: "radio-input" %>
+                  <%= sp.label :preference_level_id, level.name, class: "radio-label" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="d-flex justify-content-end">
+    <%= f.submit "シフト希望登録", class: "btn btn-primary" %>
+  </div>
+<% end %>

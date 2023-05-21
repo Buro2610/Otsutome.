@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'shift_preferences/new'
   root   "static_pages#home"
   get    "/help",    to: "static_pages#help"
   get    "/about",   to: "static_pages#about"
@@ -20,6 +21,8 @@ Rails.application.routes.draw do
   resources :shifts,   except: %i[show]
   get '/shifts', to: 'static_pages#home'
 
+
+  resources :shift_preferences, only: [:new, :create, :edit, :update, :destroy, :index]
 
 
 end
