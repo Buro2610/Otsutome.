@@ -215,13 +215,14 @@ input {
 }
 
 .checkbox {
-  display: flex;  /* Flexboxを使用してラベルとチェックボックスを並べる */
-  align-items: center; /* 垂直方向の中心に配置 */
+  display: block;  /* Flexboxを削除してブロック要素に変更 */
   margin: 10px 0; /* 上と下に10pxのマージンを追加 */
 }
 
+
 .checkbox label{
-  margin-left: 20px; /* よくわからない */
+  margin-left: 20px; /* ラベルの左側に20pxのマージンを追加 */
+  display: inline-block; /* ラベルに対してマージンを適用するためには、ラベルをinline-block要素にする */
 }
 
 

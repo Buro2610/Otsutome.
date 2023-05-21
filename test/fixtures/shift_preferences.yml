@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  date: 2023-05-21
+  time_slot: one
+  preference_level: one
+
+two:
+  user: two
+  date: 2023-05-21
+  time_slot: two
+  preference_level: two

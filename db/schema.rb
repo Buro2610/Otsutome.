@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_20_065636) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
+  create_table "preference_levels", force: :cascade do |t|
+    t.string "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "shift_preferences", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "date"
+    t.integer "time_slot_id", null: false
+    t.integer "preference_level_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["preference_level_id"], name: "index_shift_preferences_on_preference_level_id"
+    t.index ["time_slot_id"], name: "index_shift_preferences_on_time_slot_id"
+    t.index ["user_id"], name: "index_shift_preferences_on_user_id"
+  end
+
   create_table "shifts", force: :cascade do |t|
     t.datetime "start_time", precision: nil
     t.datetime "end_time", precision: nil
@@ -35,6 +53,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_20_065636) do
     t.integer "user_id", null: false
   end
 
+  create_table "time_slots", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -48,6 +72,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_20_065636) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "shift_preferences", "preference_levels"
+  add_foreign_key "shift_preferences", "time_slots"
+  add_foreign_key "shift_preferences", "users"
   add_foreign_key "shifts", "users"
   add_foreign_key "tasks", "users"
 end

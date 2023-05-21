@@ -4,7 +4,7 @@
   <h1 class="top">業務設定</h1>
 
   <%= form_with(model: @task, local: true, id: 'new_task_form') do |f| %>
-    <%= f.label :name, "業務名" %>
+    <%= f.label :name, "業務名(8文字まで)" %>
     <%= f.text_field :name, class: 'form-control' %>
     <%= f.submit "業務を追加", class: "btn btn-primary" %>
   <% end %>
@@ -15,7 +15,17 @@
     <% @tasks.each do |task| %>
       <li>
         <%= task.name %>
-        <%= link_to "編集", edit_task_path(task) %>
+        <!-- 編集フォームを非表示にします -->
+        <div id="edit_task_form_container" style="display: none;">
+          <%= form_with(model: @task, local: true, id: 'edit_task_form') do |f| %>
+            <%= f.hidden_field :id, class: 'form-control' %>
+            <%= f.label :name, "業務名(8文字まで)" %>
+            <%= f.text_field :name, class: 'form-control' %>
+            <%= f.submit "業務を更新", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+
+        <a href="#" class="edit-btn" data-id="<%= task.id %>" data-name="<%= task.name %>">編集</a>
         <a data-confirm="削除しますか？" rel="nofollow" data-method="delete" href="/tasks/<%= task.id %>" class="delete-btn" data-url="/tasks/<%= task.id %>" data-redirect="/tasks">削除</a>
       </li>
     <% end %>
@@ -61,6 +71,10 @@
       }
     });
   });
+
+
+
 </script>
+
 
 
