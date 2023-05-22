@@ -1,16 +1,6 @@
-<%= form_with(model: @shift, local: true) do |f| %>
-  <% if @shift.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@shift.errors.count, "error") %> prohibited this shift from being saved:</h2>
-
-      <ul>
-      <% @shift.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<% provide(:title, "New shift") %>
+<%= form_with model: @shift, url: shifts_path, local: true do |f| %>
+  <%= render 'shared/error_messages', object: @shift %>
   <h1>新規シフト登録</h1>
 
   <table class="table table-borderless">
@@ -36,8 +26,8 @@
     </tr>
     <tr>
       <td>
-        <div class="datetime_select">
-          <%= raw sprintf(f.datetime_select(:start_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:start_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
         </div>
       </td>
     </tr>
@@ -46,16 +36,15 @@
     </tr>
     <tr>
       <td>
-        <div class="datetime_select">
-          <%= raw sprintf(f.datetime_select(:end_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:end_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
         </div>
       </td>
     </tr>
   </table>
+
   <div class="d-flex justify-content-end">
     <%= f.submit "シフト登録", class: "btn btn-primary" %>
   </div>
+
 <% end %>
-
-
-

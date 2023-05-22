@@ -1,20 +1,24 @@
-<div class="toppage">
-  <h1 class="top">シフト希望カレンダー</h1>
-</div>
-<%= form_with(model: @shift_preference, local: true) do |f| %>
-  <% if @shift_preference.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@shift_preference.errors.count, "error") %> prohibited this shift from being saved:</h2>
+<% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+<%= form_with(url: shift_preferences_path, method: :post, local: true) do |f| %>
+  <% @shift_preferences.each_with_index do |sp, index| %>
+    <% if sp.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(sp.errors.count, "error") %> prohibited this shift from being saved:</h2>
 
-      <ul>
-      <% @shift_preference.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+        <ul>
+        <% sp.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
   <% end %>
 
-  <h1>新規シフト希望登録</h1>
+  <h1>シフト希望登録</h1>
 
   <table class="table table-borderless">
     <% @time_slots.each_with_index do |time_slot, index| %>
@@ -24,10 +28,10 @@
           <div class="radio-group">
             <% @preference_levels.each do |level| %>
               <div class="radio">
-                <%= f.fields_for "shift_preferences[#{index}]", @shift_preference do |sp| %>
-                  <%= sp.hidden_field :time_slot_id, value: time_slot.id %>
-                  <%= sp.radio_button :preference_level_id, level.id, class: "radio-input" %>
-                  <%= sp.label :preference_level_id, level.name, class: "radio-label" %>
+                <%= f.fields_for "shift_preferences[#{index}]", @shift_preferences[index] do |sp_form| %>
+                  <%= sp_form.hidden_field :time_slot_id, value: time_slot.id %>
+                  <%= sp_form.radio_button :preference_level_id, level.id, class: "radio-input" %>
+                  <%= sp_form.label :preference_level_id, level.name, class: "radio-label" %>
                 <% end %>
               </div>
             <% end %>
@@ -40,3 +44,4 @@
     <%= f.submit "シフト希望登録", class: "btn btn-primary" %>
   </div>
 <% end %>
+

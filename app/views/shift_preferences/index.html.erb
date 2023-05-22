@@ -1,7 +1,7 @@
 <% provide(:title, "Shift Preferences Calendar") %>
 
 <div class="toppage">
-  <h1 class="top">シフト希望カレンダー</h1>
+  <h1 class="top">シフト希望</h1>
 </div>
 
 <div class="container">
@@ -14,7 +14,7 @@
           <div>
             <%= link_to edit_shift_preference_path(shift_preference), remote: true do %>
               <% if shift_preference %>
-                <%= "#{shift_preference.user.name}: #{shift_preference.time_slot.name} (#{shift_preference.preference_level.name}) - 設定済み" %>
+                <%= "#{shift_preference.user.name}: #{shift_preference.time_slot.name} (#{shift_preference.preference_level.name})" %>
               <% else %>
                 <%= "未設定" %>
               <% end %>
@@ -23,7 +23,7 @@
         <% end %>
 
         <div>
-          <%= link_to new_shift_preference_path(default_date: date), remote: true do %>
+          <%= link_to new_shift_preference_path(default_date: date.to_s), remote: true do %>
             シフト希望
           <% end %>
         </div>

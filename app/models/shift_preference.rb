@@ -11,4 +11,9 @@ class ShiftPreference < ApplicationRecord
 
   # 同じユーザーが同じ日に同じタイムスロットで2つ以上のシフト希望を持たないこと
   validates :user_id, uniqueness: { scope: [:time_slot_id, :datetime] }
+
+  def start_time
+    datetime
+  end
+
 end
