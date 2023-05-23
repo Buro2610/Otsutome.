@@ -1,0 +1,49 @@
+<% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+<%= form_with(url: shift_preferences_path, method: :post, local: true) do |f| %>
+  <%= f.hidden_field :default_date, value: params[:default_date] || Date.today.to_s %>
+  <% @shift_preferences.each_with_index do |sp, index| %>
+    <% if sp.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(sp.errors.count, "error") %> prohibited this shift from being saved:</h2>
+
+        <ul>
+        <% sp.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
+
+  <h1>シフト希望登録</h1>
+
+  <table class="table table-borderless">
+    <% @time_slots.each_with_index do |time_slot, index| %>
+      <tr>
+        <td><%= f.label :time_slot, "時間割: #{time_slot.name}" %></td>
+        <td>
+          <div class="radio-group">
+            <% @preference_levels.each do |level| %>
+              <div class="radio">
+                <%= f.fields_for "shift_preferences[#{index}]", @shift_preferences[index] do |sp_form| %>
+                  <%= sp_form.hidden_field :time_slot_id, value: time_slot.id %>
+                  <%= sp_form.radio_button :preference_level_id, level.id, class: "radio-input" %>
+                  <%= sp_form.label :preference_level_id, level.name, class: "radio-label" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="d-flex justify-content-end">
+    <%= f.submit "シフト希望登録", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+

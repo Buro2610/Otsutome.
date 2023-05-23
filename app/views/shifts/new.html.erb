@@ -1,5 +1,6 @@
-<%= form_with(model: @shift, local: true) do |f| %>
-<%= render 'shared/error_messages', object: f.object %>
+<% provide(:title, "New shift") %>
+<%= form_with model: @shift, url: shifts_path, local: true do |f| %>
+  <%= render 'shared/error_messages', object: @shift %>
   <h1>新規シフト登録</h1>
 
   <table class="table table-borderless">
@@ -16,9 +17,6 @@
                 <%= f.label :otsutome_title, title, class: "radio-label" %>
               </div>
             <% end %>
-          <% else %>
-            シフトの名称が未設定のため、「名称未設定」となります
-            <%= f.hidden_field :otsutome_title, value: "名称未設定" %>
           <% end %>
         </div>
       </td>
@@ -28,8 +26,8 @@
     </tr>
     <tr>
       <td>
-        <div class="datetime_select">
-          <%= raw sprintf(f.datetime_select(:start_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:start_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
         </div>
       </td>
     </tr>
@@ -38,13 +36,15 @@
     </tr>
     <tr>
       <td>
-        <div class="datetime_select">
-          <%= raw sprintf(f.datetime_select(:end_time, with_css_classes: true, default: { year: @default_date.year, month: @default_date.month, day: @default_date.day }, minute_step: 10, use_month_numbers: true, start_year: (Time.current.year), end_year: (Time.current.year + 1), date_separator: '%s', datetime_separator: "%s", time_separator: "%s"), "年 ", "月 ", "日 ", "時 ") + "分" %>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:end_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
         </div>
       </td>
     </tr>
   </table>
+
   <div class="d-flex justify-content-end">
     <%= f.submit "シフト登録", class: "btn btn-primary" %>
   </div>
+
 <% end %>

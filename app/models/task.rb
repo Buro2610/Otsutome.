@@ -1,3 +1,5 @@
 class Task < ApplicationRecord
-  belongs_to :user  # 一つのタスクは一人のユーザーに所属する
+  belongs_to :user  # タスクはユーザーに所属？
+
+  validates :name, length: { maximum: 8 },presence: true
 end

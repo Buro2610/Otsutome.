@@ -4,7 +4,7 @@ class Shift < ApplicationRecord
   validates :user_id, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
-  validates :otsutome_title, length: { maximum: 8 }
+  validates :otsutome_title, presence: true  # otsutome_titleが必ず存在することを要求
   validate :start_time_before_end_time
 
 

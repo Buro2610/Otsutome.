@@ -9,9 +9,10 @@ before_action :correct_user,   only: [:destroy, :update]
       flash[:success] = "シフトを作成しました！"
       redirect_to calendar_path(@shift.user)
     else
+      @task_names = Task.all.pluck(:name)
       @feed_items = current_user.feed.paginate(page: params[:page])
       @default_date = params[:default_date]&.to_date || Date.today
-      render 'shifts/new'
+      render 'shifts/new', object: @shift, status: :unprocessable_entity
     end
   end
 
@@ -45,11 +46,13 @@ before_action :correct_user,   only: [:destroy, :update]
   end
 
   def update
-    if @shift.update!(shift_params)
+    if @shift.update(shift_params) # here change update! to update
       flash[:success] = "シフトが更新されました！"
       redirect_to calendar_path(@shift.user)
     else
-      render 'edit', status: :unprocessable_entity
+      @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
+      @default_date = params[:default_date]&.to_date || Date.today
+      render 'edit', object: @shift, status: :unprocessable_entity
     end
   end
 

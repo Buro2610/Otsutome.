@@ -47,3 +47,23 @@ tasks = ["オーダー", "オーブン", "パスタ", "ウォッシュ", "ドリ
   end
 end
 
+
+# preference_levelsの初期データを追加
+preference_level_names = ["可能", "恐らく可","まだ不明", "多分不可", "絶対不可"]
+preference_level_names.each do |name|
+  PreferenceLevel.create!(name: name)
+end
+
+# time_slotsの初期データを追加
+time_slot_definitions = [
+  {name: "朝", start_time: "06:00", end_time: "10:00"},
+  {name: "昼", start_time: "10:00", end_time: "14:00"},
+  {name: "夕", start_time: "14:00", end_time: "19:00"},
+  {name: "夜", start_time: "19:00", end_time: "23:00"}
+]
+time_slot_definitions.each do |definition|
+  TimeSlot.create!(name: definition[:name], start_time: definition[:start_time], end_time: definition[:end_time])
+end
+
+
+

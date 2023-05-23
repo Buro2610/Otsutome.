@@ -33,14 +33,15 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-
   def update
     @user = User.find(params[:id])
+    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
     if @user.update(user_params)
       flash[:success] = "プロフィールを更新しました"
       redirect_to @user
     else
-      render 'edit', status: :unprocessable_entity
+      flash[:danger] = "プロフィールの更新に失敗しました"
+      render 'edit'
     end
   end
 
