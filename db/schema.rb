@@ -20,7 +20,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
 
   create_table "shift_preferences", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.datetime "datetime"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.integer "time_slot_id", null: false
     t.integer "preference_level_id", null: false
     t.datetime "created_at", null: false
