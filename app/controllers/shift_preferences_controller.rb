@@ -5,21 +5,21 @@ class ShiftPreferencesController < ApplicationController
     @shift_preferences = ShiftPreference.all
   end
 
-def new
-  @shift_preference = ShiftPreference.new
-  @time_slots = TimeSlot.all
-  @shift_preferences = @time_slots.map do |time_slot|
-    date = DateTime.parse(params[:default_date] || Date.today.to_s).beginning_of_day
-    current_user.shift_preferences.build(time_slot: time_slot, datetime: date)
+  def new
+    @shift_preference = ShiftPreference.new
+    @time_slots = TimeSlot.all
+    @shift_preferences = @time_slots.map do |time_slot|
+      date = DateTime.parse(params[:default_date] || Date.today.to_s).beginning_of_day
+      current_user.shift_preferences.build(time_slot: time_slot, datetime: date)
+    end
+    @preference_level_names = PreferenceLevel.pluck(:name)
+    @preference_levels = PreferenceLevel.all
   end
-  @preference_level_names = PreferenceLevel.pluck(:name)
-  @preference_levels = PreferenceLevel.all
-end
 
 
 def create
+  date = DateTime.parse(params[:default_date]).beginning_of_day
   @shift_preferences = params[:shift_preferences].to_unsafe_h.values.map do |sp|
-    date = DateTime.parse(params[:default_date] || Date.today.to_s).beginning_of_day
     time_slot = TimeSlot.find(sp["time_slot_id"])
     datetime = date.change(hour: time_slot.start_time.hour, min: time_slot.start_time.min)
     current_user.shift_preferences.new(sp.slice("time_slot_id", "preference_level_id").merge(datetime: datetime))
@@ -31,16 +31,20 @@ def create
     redirect_to shift_preferences_path
   else
     @shift_preference = ShiftPreference.new
-    @preference_level_names = PreferenceLevel.pluck(:name)
     @time_slots = TimeSlot.all
+    @shift_preferences = @time_slots.map do |time_slot|
+      date = DateTime.parse(shift_preference_params[:default_date] || Date.today.to_s).beginning_of_day
+      current_user.shift_preferences.build(time_slot: time_slot, datetime: date)
+    end
+    @preference_level_names = PreferenceLevel.pluck(:name)
     @preference_levels = PreferenceLevel.all
 
-    # ここで、保存に失敗した理由を flash に設定します。
     flash.now[:alert] = @shift_preferences.map { |sp| sp.errors.full_messages }.flatten.join(", ")
 
     render 'new'
   end
 end
+
 
 
 
@@ -75,7 +79,10 @@ end
   end
 
   def shift_preference_params
-      params.require(:shift_preference).permit(shift_preferences: [:time_slot_id, :preference_level_id])
+    params.require(:shift_preferences).permit!
+    params[:shift_preferences].to_unsafe_h.values.map do |p|
+      ActionController::Parameters.new(p).permit(:time_slot_id, :preference_level_id, :default_date, :user_id)
+    end
   end
 
 

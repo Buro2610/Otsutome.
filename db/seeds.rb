@@ -59,7 +59,7 @@ time_slot_definitions = [
   {name: "朝", start_time: "06:00", end_time: "10:00"},
   {name: "昼", start_time: "10:00", end_time: "14:00"},
   {name: "夕", start_time: "14:00", end_time: "19:00"},
-  {name: "夜", start_time: "19:00", end_time: "24:00"}
+  {name: "夜", start_time: "19:00", end_time: "23:00"}
 ]
 time_slot_definitions.each do |definition|
   TimeSlot.create!(name: definition[:name], start_time: definition[:start_time], end_time: definition[:end_time])
