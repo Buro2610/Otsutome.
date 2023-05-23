@@ -24,7 +24,7 @@
   <table class="table table-borderless">
     <% @time_slots.each_with_index do |time_slot, index| %>
       <tr>
-        <td><%= f.label :time_slot, "時間割: #{time_slot.name}" %></td>
+        <td><%= f.label :time_slot, "時間割: #{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></td>
         <td>
           <div class="radio-group">
             <% @preference_levels.each do |level| %>

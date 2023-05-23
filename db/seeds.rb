@@ -61,8 +61,13 @@ time_slot_definitions = [
   {name: "夕", start_time: "14:00", end_time: "19:00"},
   {name: "夜", start_time: "19:00", end_time: "23:00"}
 ]
+time_zone = ActiveSupport::TimeZone.new("Tokyo")  # <- ここを追加
 time_slot_definitions.each do |definition|
-  TimeSlot.create!(name: definition[:name], start_time: definition[:start_time], end_time: definition[:end_time])
+  TimeSlot.create!(
+    name: definition[:name],
+    start_time: time_zone.parse(definition[:start_time]),
+    end_time: time_zone.parse(definition[:end_time])
+  )
 end
 
 
