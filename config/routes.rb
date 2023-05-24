@@ -22,8 +22,8 @@ Rails.application.routes.draw do
   get '/shifts', to: 'static_pages#home'
 
 
-  resources :shift_preferences, only: [:new, :create, :edit, :update, :destroy, :index]
-
+  resources :shift_preferences, only: [:new, :create, :destroy, :index]
+  get "/shift_preferences/admin", to: "shift_preferences#adminindex"
 
 end
 

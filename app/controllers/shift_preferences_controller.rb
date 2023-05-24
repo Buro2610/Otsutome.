@@ -2,8 +2,13 @@ class ShiftPreferencesController < ApplicationController
   before_action :set_shift_preference, only: [:edit, :update, :destroy]
 
   def index
+    @shift_preferences = current_user.shift_preferences
+  end
+
+  def adminindex
     @shift_preferences = ShiftPreference.all
   end
+
 
   def new
     @shift_preference = ShiftPreference.new
