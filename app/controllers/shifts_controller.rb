@@ -3,15 +3,20 @@ class ShiftsController < ApplicationController
 before_action :logged_in_user, only: [:create, :destroy, :update]
 before_action :correct_user,   only: [:destroy, :update]
 
+# createアクション
   def create
-    @shift = current_user.shifts.build(shift_params)
+    @default_date = params[:default_date]&.to_date || Date.today
+    shift_params_with_date = shift_params.merge({
+      start_time: DateTime.new(@default_date.year, @default_date.month, @default_date.day, shift_params["start_time(4i)"].to_i, shift_params["start_time(5i)"].to_i),
+      end_time: DateTime.new(@default_date.year, @default_date.month, @default_date.day, shift_params["end_time(4i)"].to_i, shift_params["end_time(5i)"].to_i)
+    })
+    @shift = current_user.shifts.build(shift_params_with_date)
     if @shift.save
       flash[:success] = "シフトを作成しました！"
       redirect_to calendar_path(@shift.user)
     else
       @task_names = Task.all.pluck(:name)
       @feed_items = current_user.feed.paginate(page: params[:page])
-      @default_date = params[:default_date]&.to_date || Date.today
       render 'shifts/new', object: @shift, status: :unprocessable_entity
     end
   end
@@ -33,10 +38,11 @@ before_action :correct_user,   only: [:destroy, :update]
     @shifts = Shift.all
   end
 
+  # newアクション
   def new
     @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
-    @shift = Shift.new
     @default_date = params[:default_date]&.to_date || Date.today
+    @shift = Shift.new(start_time: @default_date.beginning_of_day, end_time: @default_date.end_of_day)
   end
 
   def edit

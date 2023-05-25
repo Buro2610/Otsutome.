@@ -22,8 +22,15 @@ Rails.application.routes.draw do
   get '/shifts', to: 'static_pages#home'
 
 
-  resources :shift_preferences, only: [:new, :create, :destroy, :index]
   get "/shift_preferences/admin", to: "shift_preferences#adminindex"
+  get "/shift_preferences/shift", to: "shift_preferences#adminshift"
+
+  resources :shift_preferences, only: [:new, :create, :destroy, :index] do
+    collection do
+      get :datatable
+    end
+  end
+
 
 end
 
