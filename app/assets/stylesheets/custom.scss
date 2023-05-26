@@ -44,18 +44,20 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: 3em;
   letter-spacing: -2px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
 h2 {
   font-size: 1.2em;
   letter-spacing: -1px;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   text-align: center;
   font-weight: normal;
   color: $gray-light;
 }
+
+
 
 p {
   font-size: 1.1em;
@@ -133,6 +135,14 @@ footer {
     }
   }
 }
+
+.admin-view {
+  width: 90%; // 画面の90%の幅に設定します
+  max-width: 1600px; // 最大幅を1200pxに設定します
+  margin: 0 auto; // 上下のマージンは0、左右のマージンは自動に設定します
+}
+
+
 
 
 
@@ -417,6 +427,8 @@ span.image {
 
 
 
+
+
 .fs10 {
   font-size: 10px;
 }
@@ -435,3 +447,4 @@ span.image {
 .has-events {
   background: #98fb98;
 }
+

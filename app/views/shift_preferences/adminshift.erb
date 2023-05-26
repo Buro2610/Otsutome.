@@ -1,0 +1,29 @@
+<% provide(:title, "AdminShiftEdit") %>
+
+<div class="toppage admin-view">
+  <h1 class="top">シフト管理</h1>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="adminindex">
+      <button id="show-possible">可能のみ表示</button>
+        <%= week_calendar events: @shift_preferences do |date, shift_preferences| %>
+          <% TimeSlot.all.each do |time_slot| %>
+            <div class="timeslot-section" data-timeslot="<%= time_slot.name %>">
+              <h2 class><%= time_slot.name %></h2>
+              <% shift_preferences.select { |sp| sp.time_slot.name == time_slot.name }.sort_by(&:created_at).each do |shift_preference| %>
+                <div class="shift-preference" data-preference-level="<%= shift_preference.preference_level.name %>">
+                  <% if shift_preference %>
+                    <%= "#{shift_preference.user.name}: #{shift_preference.preference_level.name}" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

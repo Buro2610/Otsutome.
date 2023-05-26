@@ -12,23 +12,49 @@
 
         <% shift_preferences.each do |shift_preference| %>
           <div>
-            <%= link_to edit_shift_preference_path(shift_preference), remote: true do %>
-              <% if shift_preference %>
-                <%= "#{shift_preference.user.name}: #{shift_preference.time_slot.name} (#{shift_preference.preference_level.name})" %>
-              <% else %>
-                <%= "未設定" %>
-              <% end %>
+            <% if shift_preference %>
+              <%= "#{shift_preference.time_slot.name} (#{shift_preference.preference_level.name})" %>
             <% end %>
           </div>
         <% end %>
 
-        <div>
-          <%= link_to new_shift_preference_path(default_date: date.to_s), remote: true do %>
-            シフト希望
-          <% end %>
-        </div>
+        <% if shift_preferences.any? %>
+          <div>
+            <%= link_to '削除', shift_preferences.first, method: :delete, data: { confirm: '削除してもよろしいですか？' }, class: 'delete-btn', 'data-url': shift_preference_path(shift_preferences.first), 'data-redirect': shift_preferences_path %>
+          </div>
+        <% end %>
+
+        <% if shift_preferences.empty? %>
+          <div>
+            <%= link_to '未設定', new_shift_preference_path(default_date: date.to_s), remote: true %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
 </div>
 
+
+
+
+<script>
+// Delete handler
+document.querySelectorAll('.delete-btn').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (confirm('本当に削除しますか？')) {
+      fetch(e.target.dataset.url, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        }
+      })
+      .finally(function() {
+        // 成功したか失敗したかに関わらず、ページ全体をリロード
+        location.reload();
+      });
+    }
+  });
+});
+
+</script>

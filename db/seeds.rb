@@ -6,7 +6,7 @@ admin_user = User.create!(name:  "管理人1",
              admin: true)
 
 # 追加のユーザーをまとめて生成する
-34.times do |n|
+6.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
@@ -28,7 +28,7 @@ end
 users = User.order(:created_at).take(6)
 tasks = ["オーダー", "オーブン", "パスタ", "ウォッシュ", "ドリンク"]
 
-19.times do
+30.times do
   users.each do |user|
     date_from = Date.parse('2023-05-01')
     date_to = Date.parse('2023-06-30')
@@ -71,4 +71,20 @@ time_slot_definitions.each do |definition|
 end
 
 
+
+# 以前のユーザー（admin以外）の各日に対してランダムなshift_preferenceを生成する
+non_admin_users = User.where.not(id: admin_user.id)
+time_slots = TimeSlot.all  # <- ここを追加
+
+(0..17).each do |n|
+  current_date = Date.today + n.days
+  non_admin_users.each do |user|
+    time_slots.each do |time_slot|
+      start_time = current_date.to_time.change({ hour: time_slot.start_time.hour, min: time_slot.start_time.min })
+      end_time = current_date.to_time.change({ hour: time_slot.end_time.hour, min: time_slot.end_time.min })
+      preference_level_id = PreferenceLevel.ids.sample
+      ShiftPreference.create!(user: user, start_time: start_time, end_time: end_time, time_slot: time_slot, preference_level_id: preference_level_id)
+    end
+  end
+end
 

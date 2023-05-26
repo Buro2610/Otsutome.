@@ -1,0 +1,39 @@
+<% provide(:title, "Admin Shift search") %>
+
+<div class="toppage">
+  <h1 class="top">シフト検索</h1>
+</div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="adminindex">
+          <table id="shift-preferences-table" class="display">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Time Slot</th>
+                <th>Preference Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @shift_preferences.each do |shift_preference| %>
+                <tr>
+                  <td><%= shift_preference.user.name %></td>
+                  <td><%= shift_preference.time_slot.name %></td>
+                  <td><%= shift_preference.preference_level.name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#shift-preferences-table').DataTable();
+  });
+</script>
+

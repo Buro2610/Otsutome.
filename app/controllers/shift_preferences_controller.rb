@@ -2,6 +2,15 @@ class ShiftPreferencesController < ApplicationController
   before_action :set_shift_preference, only: [:edit, :update, :destroy]
 
   def index
+    @shift_preferences = current_user.shift_preferences
+  end
+
+  def adminindex
+    @shift_preferences = ShiftPreference.all
+  end
+
+
+  def adminshift
     @shift_preferences = ShiftPreference.all
   end
 
@@ -52,30 +61,30 @@ class ShiftPreferencesController < ApplicationController
   end
 
 
-
-
-
-
-  def edit
-  end
-
-  def update
-    if @shift_preference.update(shift_preference_params)
-      flash[:success] = "希望時間が更新されました！"
-      redirect_to shift_preferences_path # ここは適切なリダイレクト先に変更してください
-    else
-      render :edit
-    end
-  end
-
   def destroy
-    @shift_preference.destroy
+    # シフト希望の日付を取得
+    date = @shift_preference.start_time.to_date
+
+    # 特定のユーザーと日付に該当する全てのシフト希望を削除
+    current_user.shift_preferences.where(start_time: date.beginning_of_day..date.end_of_day).destroy_all
+
     flash[:success] = "希望時間が削除されました"
-    redirect_to shift_preferences_path # ここは適切なリダイレクト先に変更してください
+    redirect_to shift_preferences_path
   end
+
+
 
   def start_time
     time_slot.start_time
+  end
+
+
+  def datatable
+    respond_to do |format|
+      format.json {
+        render json: ShiftPreferencesDatatable.new(params)
+      }
+    end
   end
 
   private
