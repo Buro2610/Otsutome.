@@ -6,7 +6,8 @@ import "controllers"
 import "custom/menu"
 
 import $ from 'jquery';
-import 'datatables.net';
+import 'datatables.net'
+
 
 $(document).on('turbolinks:load', function(){
     $('#shifts-table').DataTable({

@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  *= require simple_calendar
- #*= require font-awesome
+ *= require font-awesome
  *= require dataTables/jquery.dataTables
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  */
