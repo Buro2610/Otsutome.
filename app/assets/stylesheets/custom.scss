@@ -57,7 +57,12 @@ h2 {
   color: $gray-light;
 }
 
-
+h2.my-class {
+  font-weight: bold;
+  padding: 1px 0;
+  border-bottom: 2px solid $gray-light;
+  text-align:left
+}
 
 p {
   font-size: 1.1em;
@@ -357,8 +362,21 @@ span.image {
   }
 }
 
+/* shift_preferencesの色関連 */
 
-//追記
+/*何故か下のカラーボックスが表示されないので代わりに■を表示中*/
+.color-box {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+
+
+
+
+//追記 カレンダー関連
 
 
 .simple-calendar {

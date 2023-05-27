@@ -47,12 +47,20 @@ tasks = ["オーダー", "オーブン", "パスタ", "ウォッシュ", "ドリ
   end
 end
 
+# colorの初期データを追加
+colors = ["blue", "green", "yellow", "red", "gray", "#FF00FF", "#800080", "#FF4500", "#8B4513", "#4682B4", "#32CD32", "#008080"]
+color_objects = colors.map do |color|
+  Color.create!(name: color)
+end
+
+# preference_level_namesの初期データを追加
+preference_level_names = ["可能", "多分可能", "多分不可", "不可","不明"]
 
 # preference_levelsの初期データを追加
-preference_level_names = ["可能", "恐らく可","まだ不明", "多分不可", "絶対不可"]
-preference_level_names.each do |name|
-  PreferenceLevel.create!(name: name)
+preference_level_names.each_with_index do |name, index|
+  PreferenceLevel.create!(name: name, color_id: color_objects[index].id)
 end
+
 
 # time_slotsの初期データを追加
 time_slot_definitions = [
@@ -72,19 +80,22 @@ end
 
 
 
-# 以前のユーザー（admin以外）の各日に対してランダムなshift_preferenceを生成する
+
+# admin以外のユーザーの今日から17日間の各日に対してランダムなshift_preferenceを生成する
 non_admin_users = User.where.not(id: admin_user.id)
 time_slots = TimeSlot.all  # <- ここを追加
 
 (0..17).each do |n|
   current_date = Date.today + n.days
+  current_time = current_date.to_time
   non_admin_users.each do |user|
     time_slots.each do |time_slot|
-      start_time = current_date.to_time.change({ hour: time_slot.start_time.hour, min: time_slot.start_time.min })
-      end_time = current_date.to_time.change({ hour: time_slot.end_time.hour, min: time_slot.end_time.min })
+      start_time = current_time.change({ hour: time_slot.start_time.hour, min: time_slot.start_time.min })
+      end_time = current_time.change({ hour: time_slot.end_time.hour, min: time_slot.end_time.min })
       preference_level_id = PreferenceLevel.ids.sample
-      ShiftPreference.create!(user: user, start_time: start_time, end_time: end_time, time_slot: time_slot, preference_level_id: preference_level_id)
+      ShiftPreference.create!(user: user, start_time: start_time, end_time: end_time, time_slot: time_slot, preference_level_id: preference_level_id, date: current_date)
     end
   end
 end
+
 

@@ -66,17 +66,6 @@
       <% end %>
 
       <br>
-      <h1 class="top">管理者用メニュー</h1>
-      <%= form_with(model: @allshift, local: true) do |f| %>
-
-        <%= f.label :otsutome_title, "業務タイトル" %>
-        <%= f.text_field :name, class: 'form-control' %>
-
-        <%= f.label :otsutome_content, "業務内容" %>
-        <%= f.email_field :otsutome_content, class: 'form-control' %>
-
-        <%= f.submit "業務を追加", class: "btn btn-primary" %>
-      <% end %>
     </div>
   </div>
 </div>
