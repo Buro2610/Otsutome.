@@ -4,6 +4,8 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.all
     @task = Task.new  # 新しいタスクを作成するフォーム用
+    @preference_levels = PreferenceLevel.all
+    @time_slots = TimeSlot.all
   end
 
   def create

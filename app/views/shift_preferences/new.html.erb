@@ -3,7 +3,7 @@
     <%= flash[:alert] %>
   </div>
 <% end %>
-<%= form_with(url: shift_preferences_path, method: :post, local: true) do |f| %>
+<%= form_with(url: shift_preferences_path, method: :post, local: true, data: { turbo: false }) do |f| %>
   <%= f.hidden_field :default_date, value: params[:default_date] || Date.today.to_s %>
   <% @shift_preferences.each_with_index do |sp, index| %>
     <% if sp.errors.any? %>

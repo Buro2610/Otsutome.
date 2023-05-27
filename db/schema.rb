@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_27_154701) do
+  create_table "colors", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "preference_levels", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "color_id", null: false
+    t.index ["color_id"], name: "index_preference_levels_on_color_id"
     t.index ["name"], name: "index_preference_levels_on_name", unique: true
   end
 
@@ -26,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
     t.integer "preference_level_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
     t.index ["preference_level_id"], name: "index_shift_preferences_on_preference_level_id"
     t.index ["time_slot_id"], name: "index_shift_preferences_on_time_slot_id"
     t.index ["user_id"], name: "index_shift_preferences_on_user_id"
@@ -57,8 +66,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
 
   create_table "time_slots", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "start_time", precision: nil, null: false
-    t.datetime "end_time", precision: nil, null: false
+    t.time "start_time", null: false
+    t.time "end_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_time_slots_on_name", unique: true
@@ -77,6 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_21_065610) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "preference_levels", "colors"
   add_foreign_key "shift_preferences", "preference_levels"
   add_foreign_key "shift_preferences", "time_slots"
   add_foreign_key "shift_preferences", "users"

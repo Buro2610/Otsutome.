@@ -2,9 +2,9 @@
 
 <div class="container">
   <h1 class="top">業務設定</h1>
-
+  <h2 class="my-class">業務の追加or削除</h2>
   <%= form_with(model: @task, local: true, id: 'new_task_form') do |f| %>
-    <%= f.label :name, "業務名(8文字まで)" %>
+    <%= f.label :name, "(8文字まで)" %>
     <%= f.text_field :name, class: 'form-control' %>
     <%= f.submit "業務を追加", class: "btn btn-primary" %>
   <% end %>
@@ -15,25 +15,41 @@
     <% @tasks.each do |task| %>
       <li>
         <%= task.name %>
-        <!-- 編集フォームを非表示にします -->
-        <div id="edit_task_form_container" style="display: none;">
-          <%= form_with(model: @task, local: true, id: 'edit_task_form') do |f| %>
-            <%= f.hidden_field :id, class: 'form-control' %>
-            <%= f.label :name, "業務名(8文字まで)" %>
-            <%= f.text_field :name, class: 'form-control' %>
-            <%= f.submit "業務を更新", class: "btn btn-primary" %>
-          <% end %>
-        </div>
-
-        <a href="#" class="edit-btn" data-id="<%= task.id %>" data-name="<%= task.name %>">編集</a>
         <a data-confirm="削除しますか？" rel="nofollow" data-method="delete" href="/tasks/<%= task.id %>" class="delete-btn" data-url="/tasks/<%= task.id %>" data-redirect="/tasks">削除</a>
       </li>
     <% end %>
   </ul>
+
+  <!-- 希望時間帯編集ボタンと一覧表示 -->
+  <h2 class="my-class">シフト希望時間帯の編集</h2>
+  <ul>
+    <% @time_slots.each do |time_slot| %>
+      <li><%= "#{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></li>
+    <% end %>
+  </ul>
+  <button class="btn btn-secondary"><a href="time_slots/edit">編集</a></button>
+
+  <!-- 希望シフト編集ボタンと一覧表示 -->
+  <h2 class="my-class">シフト希望度の編集</h2>
+  <ul>
+    <% @preference_levels.each do |preference_level| %>
+      <div class="shift-preference preference-level-<%= preference_level.id %>">
+        <li>
+          <%= preference_level.name %>
+        </li>
+      </div>
+    <% end %>
+  </ul>
+  <button class="btn btn-secondary"><a href="preference_levels/edit">編集</a></button>
+
 </div>
 
+
+
+
+
 <script>
-  // Delete handler
+  // Delete handler for task
   document.querySelectorAll('.delete-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -50,30 +66,6 @@
       }
     });
   });
-
-  // Create handler
-  document.getElementById('new_task_form').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Create new task with fetch API
-    fetch(e.target.action, {
-      method: 'POST',
-      body: new FormData(e.target),
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-      }
-    })
-    .then(function(response) {
-      if (response.ok) {
-        window.location = '/tasks'; // Redirect to tasks page
-      } else {
-        alert('業務の追加に失敗しました');
-      }
-    });
-  });
-
-
-
 </script>
 
 

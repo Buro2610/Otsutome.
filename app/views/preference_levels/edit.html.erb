@@ -1,0 +1,25 @@
+<div class="container">
+  <h1 class="top">シフト希望度の編集</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">設定色</th>
+        <th scope="col">名前</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @preference_levels.each do |preference_level| %>
+        <tr>
+          <td><div class="preference-level-<%= preference_level.id %>">■</div></td>
+          <td><%= preference_level.name.presence || '未設定' %></td>
+          <td><a href="#" class="btn btn-primary">編集</a></td>
+          <td><a href="#" class="btn btn-danger">削除</a></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+

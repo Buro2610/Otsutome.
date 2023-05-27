@@ -9,6 +9,8 @@ class TimeSlot < ApplicationRecord
   # 開始時間が終了時間よりも前であること
   validate :start_time_before_end_time
 
+
+
   private
 
   def start_time_before_end_time
