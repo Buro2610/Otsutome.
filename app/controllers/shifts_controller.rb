@@ -29,7 +29,7 @@ before_action :correct_user,   only: [:destroy, :update]
       flash[:success] = "シフトを削除しました"
       redirect_to calendar_path(user_id)
     else
-      flash[:danger] = "シフトの削除に失敗しました"
+      flash[:danger] = @shift.errors.full_messages.join(", ")
     end
   end
 
@@ -52,10 +52,11 @@ before_action :correct_user,   only: [:destroy, :update]
   end
 
   def update
-    if @shift.update(shift_params) # here change update! to update
+    if @shift.update(shift_params)
       flash[:success] = "シフトが更新されました！"
       redirect_to calendar_path(@shift.user)
     else
+      flash[:danger] = @shift.errors.full_messages.join(", ")
       @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
       @default_date = params[:default_date]&.to_date || Date.today
       render 'edit', object: @shift, status: :unprocessable_entity
@@ -78,6 +79,7 @@ before_action :correct_user,   only: [:destroy, :update]
     redirect_to root_url, status: :see_other if @shift.nil?
   end
 end
+
 
 
 

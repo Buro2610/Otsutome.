@@ -1,5 +1,6 @@
 class TimeSlot < ApplicationRecord
   # 名前が存在すること
+  has_many :shift_preferences, dependent: :destroy
   validates :name, presence: true, uniqueness: true
 
   # 開始時間と終了時間が存在すること

@@ -1,2 +1,61 @@
-<h1>TimeSlots#edit</h1>
-<p>Find me in app/views/time_slots/edit.html.erb</p>
+<% provide(:title, "Edit Time Slot") %>
+<%= form_with model: @time_slot, url: time_slot_path(@time_slot), local: true do |f| %>
+  <%= render 'shared/error_messages', object: @time_slot %>
+  <h1>時間割の編集</h1>
+
+  <table class="table table-borderless">
+    <tr>
+      <td><%= f.label :name, "志望時間" %></td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.text_field :name, class: 'form-control' %>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :start_time, "開始時間" %></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:start_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.label :end_time, "終了時間" %></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:end_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="d-flex justify-content-end">
+    <% if action_name == "edit" %>
+      <%= link_to "削除", "#", class: "btn btn-danger me-1", id: "delete-btn", data: { url: time_slot_path(@time_slot), redirect: tasks_path } %>
+    <% end %>
+
+    <script>
+      document.getElementById('delete-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('本当に削除しますか？')) {
+          fetch(e.target.dataset.url, {
+            method: 'DELETE',
+            headers: {
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            }
+          })
+          .then(function() {
+            window.location = e.target.dataset.redirect;
+          });
+        }
+      });
+    </script>
+    <%= f.submit "時間割の更新", class: "btn btn-success" %>
+  </div>
+<% end %>
+
