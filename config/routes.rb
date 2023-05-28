@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'time_slots/edit'
-  get 'preference_levels/edit'
-  get 'shift_preferences/new'
   root   "static_pages#home"
   get    "/help",    to: "static_pages#help"
   get    "/about",   to: "static_pages#about"
@@ -23,7 +20,10 @@ Rails.application.routes.draw do
   resources :shifts,   except: %i[show]
   get '/shifts', to: 'static_pages#home'
 
+  resources :time_slots, only: [:create, :update, :destroy, :edit]
+  resources :preference_levels, only: [:create, :update, :destroy, :edit]
 
+  get 'shift_preferences/new'
   get "/shift_preferences/admin", to: "shift_preferences#adminindex"
   get "/shift_preferences/shift", to: "shift_preferences#adminshift"
 

@@ -14,19 +14,11 @@ class TasksController < ApplicationController
       flash[:success] = "業務が追加されました"
       redirect_to tasks_path
     else
-      flash[:danger] = "業務の追加に失敗しました"
+      flash[:danger] = @task.errors.full_messages.join(", ")
       redirect_to tasks_path
     end
   end
 
-  def update
-    if @task.update(task_params)
-      flash[:success] = "業務が更新されました"
-      redirect_to tasks_path
-    else
-      render 'edit'
-    end
-  end
 
   def destroy
     @task.destroy
