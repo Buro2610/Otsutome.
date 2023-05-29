@@ -1,52 +1,45 @@
 class ShiftsController < ApplicationController
+  before_action :logged_in_user
+  before_action :admin_user, except: [:calendar]
+  before_action :set_shift, only: [:edit, :update, :destroy]
+  before_action :set_task_names, only: [:new, :create, :edit, :update]
 
-before_action :logged_in_user, only: [:create, :destroy, :update]
-before_action :correct_user,   only: [:destroy, :update]
+  def calendar
+    @user = User.find(params[:user_id])
+    @shifts = @user.shifts
+  end
 
-# createアクション
+  def admincalendar
+    @users = User.all
+    @allshifts = Shift.all
+  end
+
   def create
+    @user = User.find(params[:user_id])
     @default_date = params[:default_date]&.to_date || Date.today
     shift_params_with_date = shift_params.merge({
       start_time: DateTime.new(@default_date.year, @default_date.month, @default_date.day, shift_params["start_time(4i)"].to_i, shift_params["start_time(5i)"].to_i),
       end_time: DateTime.new(@default_date.year, @default_date.month, @default_date.day, shift_params["end_time(4i)"].to_i, shift_params["end_time(5i)"].to_i)
     })
-    @shift = current_user.shifts.build(shift_params_with_date)
+    @shift = @user.shifts.build(shift_params_with_date)
+
     if @shift.save
       flash[:success] = "シフトを作成しました！"
-      redirect_to calendar_path(@shift.user)
+      redirect_to user_shift_path(@shift.user)
     else
-      @task_names = Task.all.pluck(:name)
-      @feed_items = current_user.feed.paginate(page: params[:page])
-      render 'shifts/new', object: @shift, status: :unprocessable_entity
+      render 'new', object: @shift, status: :unprocessable_entity
     end
   end
 
-  def destroy
-    puts "Shift id: #{@shift.id}, User id: #{@shift.user.id}"
-    user_id = @shift.user.id
-    if @shift.destroy
-      puts "Redirecting to calendar_path(#{user_id})"
-      flash[:success] = "シフトを削除しました"
-      redirect_to calendar_path(user_id)
-    else
-      flash[:danger] = @shift.errors.full_messages.join(", ")
-    end
-  end
-
-
-  def index
-    @shifts = Shift.all
-  end
-
-  # newアクション
   def new
-    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
+    @user = User.find(params[:user_id])
     @default_date = params[:default_date]&.to_date || Date.today
-    @shift = Shift.new(start_time: @default_date.beginning_of_day, end_time: @default_date.end_of_day)
+    start_time = params[:start_time]&.to_time || @default_date.beginning_of_day
+    end_time = params[:end_time]&.to_time || @default_date.end_of_day
+    @shift = @user.shifts.new(start_time: start_time, end_time: end_time)
   end
 
   def edit
-    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
     @shift = Shift.find(params[:id])
     @default_date = params[:default_date]&.to_date || Date.today
   end
@@ -54,15 +47,19 @@ before_action :correct_user,   only: [:destroy, :update]
   def update
     if @shift.update(shift_params)
       flash[:success] = "シフトが更新されました！"
-      redirect_to calendar_path(@shift.user)
+      redirect_to user_calendar_path(@shift.user)
     else
       flash[:danger] = @shift.errors.full_messages.join(", ")
-      @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
       @default_date = params[:default_date]&.to_date || Date.today
       render 'edit', object: @shift, status: :unprocessable_entity
     end
   end
 
+  def destroy
+    @shift.destroy
+    flash[:success] = "シフトを削除しました"
+    redirect_to user_calendar_path(@shift.user)
+  end
 
   private
 
@@ -74,22 +71,11 @@ before_action :correct_user,   only: [:destroy, :update]
     @shift = Shift.find(params[:id])
   end
 
-  def correct_user
-    @shift = current_user.shifts.find_by(id: params[:id])
-    redirect_to root_url, status: :see_other if @shift.nil?
+  def set_task_names
+    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
+  end
+
+  def admin_user
+    redirect_to(root_url, status: :see_other) unless current_user.admin?
   end
 end
-
-
-
-
-
-  # フラッシュメッセージを Bootstrap 対応させるための設定
-  # add_flash_types :success, :info, :warning, :danger
-
-  # before_action :set_shift, only: %i[edit update destroy]
-
-
-
-
-

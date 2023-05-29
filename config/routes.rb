@@ -8,16 +8,15 @@ Rails.application.routes.draw do
   post   "/login",   to: "sessions#create"
   delete "/logout",  to: "sessions#destroy"
 
-  resources :users
-  resources :tasks,  except: %i[show]
+  resources :users do
+    resources :shifts,except: [:show]
+  end
+  resources :tasks,except: %i[show]
 
   #以下、otsutome.
 
-  get "/calendar/admin", to: "static_pages#admincalendar"
-  get "/calendar/:user_id", to: "static_pages#calendar", as: 'calendar'
+  get "/calendar/admin", to: "shifts#admincalendar"
 
-
-  resources :shifts,   except: %i[show]
   get '/shifts', to: 'static_pages#home'
 
   resources :time_slots, only: [:create, :update, :destroy, :edit]
@@ -33,6 +32,6 @@ Rails.application.routes.draw do
     end
   end
 
-
 end
+
 

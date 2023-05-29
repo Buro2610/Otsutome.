@@ -10,8 +10,8 @@
     <%= time_ago_in_words(shift.created_at) %> 前に投稿
     <% if current_user?(shift.user) %>
     <body></body>
-      <%= link_to "削除", shift, data: { "turbo-method": :delete,
-                                               turbo_confirm: "シフトを削除してもよろしいですか？" } %>
+      <%= link_to "削除", user_shift_path(user_id: @user.id, id: shift.id), method: :delete, data: { confirm: 'シフトを削除してもよろしいですか？' } %>
+
     <% end %>
   </span>
 </li>

@@ -15,8 +15,12 @@
               <h2 class="my-class"><%= "#{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></h2>
               <% shift_preferences.select { |sp| sp.time_slot.name == time_slot.name }.sort_by(&:created_at).each do |shift_preference| %>
                 <div class="shift-preference" style="color: <%= shift_preference.preference_level.color.name %>;">
+                  <%= link_to new_shift_path(user_id: shift_preference.user.id, date: shift_preference.date, start_time: time_slot.start_time, end_time: time_slot.end_time), class: "shift-link" do %>
+                    <%= "#{shift_preference.user.name}" %>
+                  <% end %>
+                  <%=  " : " %>
                   <% if shift_preference %>
-                    <%= "#{shift_preference.user.name}: #{shift_preference.preference_level.name}" %>
+                    <%= " #{shift_preference.preference_level.name}" %>
                   <% end %>
                 </div>
               <% end %>

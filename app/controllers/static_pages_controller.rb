@@ -17,14 +17,4 @@ class StaticPagesController < ApplicationController
   def contact
   end
 
-  def calendar
-    @user = User.find(params[:user_id])
-    @shifts = @user.shifts
-  end
-
-  def admincalendar
-    @users = User.all
-    @allshifts = Shift.all
-  end
-
 end
