@@ -1,34 +1,40 @@
-<% provide(:title, "AdminShiftEdit") %>
-
-<div class="toppage admin-view">
-  <h1 class="top">シフト管理</h1>
-</div>
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <div class="adminindex">
-      <button id="show-possible">可能のみ表示</button>
-        <%= week_calendar events: @shift_preferences do |date, shift_preferences| %>
-          <% TimeSlot.all.each do |time_slot| %>
-            <div class="timeslot-section" data-timeslot="<%= time_slot.name %>">
-              <h2 class="my-class"><%= "#{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></h2>
-              <% shift_preferences.select { |sp| sp.time_slot.name == time_slot.name }.sort_by(&:created_at).each do |shift_preference| %>
-                <div class="shift-preference" style="color: <%= shift_preference.preference_level.color.name %>;">
-                  <%= link_to new_shift_path(user_id: shift_preference.user.id, date: shift_preference.date, start_time: time_slot.start_time, end_time: time_slot.end_time), class: "shift-link" do %>
-                    <%= "#{shift_preference.user.name}" %>
-                  <% end %>
-                  <%=  " : " %>
-                  <% if shift_preference %>
-                    <%= " #{shift_preference.preference_level.name}" %>
-                  <% end %>
-                </div>
+<% provide(:title, "AdminShift") %>
+<div class="my-container">
+  <div class="toppage">
+    <h1 class="top">シフト管理</h1>
+  </div>
+  <button id="show-possible" class="btn btn-secondary">登録済みor未登録</button>
+  <%= week_calendar events: @shift_preferences do |date, shift_preferences| %>
+    <% TimeSlot.all.each do |time_slot| %>
+      <div class="timeslot-section" data-timeslot="<%= time_slot.name %>">
+        <h2 class="my-class"><%= "#{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></h2>
+        <% shift_preferences.select { |sp| sp.time_slot.name == time_slot.name }.sort_by(&:created_at).each do |shift_preference| %>
+          <% user = shift_preference.user %>
+          <% link_class = shift_during_timeslot?(user, date, time_slot) ? "btn btn-sm btn-success" : "btn btn-sm btn-danger" %>
+          <div class="shift-preference" style="color: <%= shift_preference.preference_level.color.name %>;">
+            <% if shift_on_date?(user, date) %>
+              <% shift = user.shifts.where('DATE(start_time) <= :date AND DATE(end_time) >= :date', date: date).first %>
+              <%= link_to edit_user_shift_path(user, shift), class: "shift-link #{link_class}" do %>
+                <%= "#{user.name} (#{shift.start_time.strftime('%H:%M')}~#{shift.end_time.strftime('%H:%M')})" %>
               <% end %>
-            </div>
-          <% end %>
+            <% else %>
+              <%= link_to new_user_shift_path(user, date: shift_preference.date, start_time: time_slot.start_time, end_time: time_slot.end_time), class: "shift-link #{link_class}" do %>
+                <%= user.name %>
+              <% end %>
+            <% end %>
+            <% if shift_preference %>
+              <div style="display: flex;justify-content: space-between;">
+                <span class="preference-level-name">
+                  <%= " #{shift_preference.preference_level.name}" %>
+                </span>
+              </div>
+            <% end %>
+          </div>
         <% end %>
       </div>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
 </div>
+
+
 

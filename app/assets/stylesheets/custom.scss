@@ -142,12 +142,30 @@ footer {
 }
 
 .admin-view {
-  width: 90%; // 画面の90%の幅に設定します
-  max-width: 1600px; // 最大幅を1200pxに設定します
+  width: 100%; // 画面の100%の幅に設定します
+  max-width: none; // 最大幅制限を削除します
   margin: 0 auto; // 上下のマージンは0、左右のマージンは自動に設定します
+  white-space: nowrap; // 改行を防ぐ
 }
 
 
+.my-container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  width: 100%;
+  max-width: 1750px; /* 必要に応じて最大幅を設定 */
+  white-space: nowrap; // 改行を防ぐ
+}
+
+
+.preference-level-name {
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: $gray-lighter;
+  padding: 2px;
+}
 
 
 

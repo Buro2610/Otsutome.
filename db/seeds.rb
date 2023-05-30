@@ -6,7 +6,7 @@ admin_user = User.create!(name:  "管理人1",
              admin: true)
 
 # 追加のユーザーをまとめて生成する
-6.times do |n|
+8.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
@@ -25,27 +25,34 @@ end
 
 
 # ユーザーの一部を対象にシフトを生成する
-users = User.order(:created_at).take(6)
+users = User.order(:created_at).take(12)
 tasks = ["オーダー", "オーブン", "パスタ", "ウォッシュ", "ドリンク"]
 
-30.times do
+time_zone = ActiveSupport::TimeZone.new("Tokyo") # 追加
+
+5.times do
   users.each do |user|
-    date_from = Date.parse('2023-05-01')
+    date_from = Date.parse('2023-06-01')
     date_to = Date.parse('2023-06-30')
     random_date = rand(date_from..date_to)
 
-    hour_from = 0
-    hour_to = 23
-    random_hour_start = rand(hour_from..hour_to)
-    random_hour_end = random_hour_start + 1
+    # そのユーザーがその日にすでにシフトを持っているか確認
+    next if user.shifts.where('DATE(start_time) = :date', date: random_date).exists?
 
-    random_start_time = DateTime.new(random_date.year, random_date.month, random_date.day, random_hour_start)
-    random_end_time = DateTime.new(random_date.year, random_date.month, random_date.day, random_hour_end)
+    hour_from = 7
+    hour_to = 18 # 最大開始時間を18時に制限
+    random_hour_start = rand(hour_from..hour_to)
+    random_hour_end = random_hour_start + 5
+
+    # タイムゾーンを明示的に指定してDateTimeオブジェクトを作成
+    random_start_time = time_zone.local(random_date.year, random_date.month, random_date.day, random_hour_start)
+    random_end_time = time_zone.local(random_date.year, random_date.month, random_date.day, random_hour_end)
 
     random_task = tasks.sample
     user.shifts.create!(start_time: random_start_time, end_time: random_end_time, otsutome_title: random_task)
   end
 end
+
 
 # colorの初期データを追加
 colors = ["blue", "green", "yellow", "red", "gray", "#FF00FF", "#800080", "#FF4500", "#8B4513", "#4682B4", "#32CD32", "#008080"]
@@ -81,11 +88,11 @@ end
 
 
 
-# admin以外のユーザーの今日から17日間の各日に対してランダムなshift_preferenceを生成する
+# admin以外のユーザーの今日から21日間の各日に対してランダムなshift_preferenceを生成する
 non_admin_users = User.where.not(id: admin_user.id)
 time_slots = TimeSlot.all  # <- ここを追加
 
-(0..17).each do |n|
+(0..21).each do |n|
   current_date = Date.today + n.days
   current_time = current_date.to_time
   non_admin_users.each do |user|

@@ -1,9 +1,13 @@
 <% provide(:title, "New shift") %>
-<%= form_with model: @shift, url: shifts_path, local: true do |f| %>
+
+<%= form_with model: [@user, @shift], local: true do |f| %>
   <%= render 'shared/error_messages', object: @shift %>
   <h1>新規シフト登録</h1>
 
   <table class="table table-borderless">
+    <div class="date">
+      <h3 style="text-align: center"><%= @shift.start_time.strftime("%Y年 %m月 %d日(%a)") %></h3>
+    </div>
     <tr>
       <td><%= f.label :otsutome_title, "業務内容" %></td>
     </tr>
