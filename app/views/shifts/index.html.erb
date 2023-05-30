@@ -1,11 +1,72 @@
-<%= month_calendar shifts: @shifts do |date, shifts| %>
-  <%= date.day %>
-
-  <% shifts.each do |shift| %>
-    <div>
-    <% if shift.start_time.present? %>
-      <h1>otsutome.</h1>
-    <% end %>
-    </div>
-  <% end %>
+<% provide(:title, "Calendar") %>
+<% if flash[:error] %>
+  <div class="alert alert-danger">
+    <%= flash[:error] %>
+  </div>
 <% end %>
+
+<div class="container">
+
+  <p id="notice"><%= notice %></p>
+
+  <div class="toppage">
+    <h1 class="top"><%= @user.name %> のカレンダー</h1>
+  </div>
+  <% if current_user.admin? %>
+    <span style="float: right;">
+      <%= link_to "管理者用カレンダー", calendar_admin_path %>
+      <br>
+      <%= link_to "管理人用シフト管理", shift_preferences_shift_path %>
+    </span>
+  <% end %>
+
+
+  <div class="row">
+    <div class="col-md-3">
+  	  <div class="schedule">今後の予定一覧</div>
+      <table class="table" id="shifts-table">
+        <thead class="thead-light">
+          <tr>
+            <th>業務名</th>
+            <th>開始時刻</th>
+            <th>作成日時</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @shifts.each do |shift| %>
+            <tr>
+              <td><%= link_to edit_user_shift_path(@user, shift), remote: true do %><%= "#{shift.otsutome_title}" %><% end %></td>
+              <td><%= shift.start_time.strftime("%-m月%-d日%-H時%-M分") %></td>
+              <td><%= shift.created_at.strftime("%-m月%-d日%-H時%-M分") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+    <div class="col-md-9">
+      <%= month_calendar events: @shifts do |date, shifts| %>
+        <div class="d-flex align-items-center mb-3">
+          <%= date.day %>
+        </div>
+        <% shifts.each do |shift| %>
+          <div class="my-1">
+            <% if shift.user.possible_task.include?(shift.otsutome_title) %>
+              <%= link_to edit_user_shift_path(@user, shift), class: "btn btn-sm btn-success", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
+                <%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
+              <% end %>
+            <% else %>
+              <%= link_to edit_user_shift_path(@user, shift), class: "btn btn-sm btn-danger", "data-bs-target": "#eventModal", "data-bs-toggle": "modal", remote: true  do %>
+                <%= "#{shift.otsutome_title}" %><br><%= "(#{shift.start_time.strftime("%R")} ~ #{shift.end_time.strftime("%R")})" %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

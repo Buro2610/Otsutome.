@@ -1,5 +1,5 @@
 <% provide(:title, "Edit shift") %>
-<%= form_with model: @shift, url: shift_path(@shift), local: true do |f| %>
+<%= form_with model: [@user, @shift], local: true do |f| %>
   <%= render 'shared/error_messages', object: @shift %>
   <h1>シフトの編集</h1>
 
@@ -45,7 +45,7 @@
 
   <div class="d-flex justify-content-end">
     <% if action_name == "edit" %>
-      <%= link_to "削除", "#", class: "btn btn-danger me-1", id: "delete-btn", data: { url: shift_path(@shift), redirect: calendar_path(@shift.user.id) } %>
+      <%= link_to "削除", "#", class: "btn btn-danger me-1", id: "delete-btn", data: { url: user_shift_path(@shift.user_id, @shift.id), redirect: calendar_admin_path } %>
     <% end %>
 
     <script>
@@ -58,8 +58,17 @@
               'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
             }
           })
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error("削除に失敗しました");
+            }
+            return response;
+          })
           .then(function() {
             window.location = e.target.dataset.redirect;
+          })
+          .catch(function(error) {
+            alert(error);
           });
         }
       });
