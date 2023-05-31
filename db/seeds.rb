@@ -19,8 +19,8 @@ end
 
 # 管理人のみ編集可能なカラムであるtask_name を設定
 task_names = ["オーダー", "オーブン", "パスタ", "ウォッシュ", "ドリンク"]
-task_names.each_with_index do |task_name, i|
-  task = Task.create!(id: i + 1, name: task_name, user: admin_user)
+task_names.each do |task_name|
+  task = Task.create!(name: task_name, user: admin_user)
 end
 
 
@@ -71,10 +71,10 @@ end
 
 # time_slotsの初期データを追加
 time_slot_definitions = [
-  {name: "朝", start_time: "06:00", end_time: "10:00"},
+  {name: "朝", start_time: "07:00", end_time: "10:00"},
   {name: "昼", start_time: "10:00", end_time: "14:00"},
-  {name: "夕", start_time: "14:00", end_time: "19:00"},
-  {name: "夜", start_time: "19:00", end_time: "23:00"}
+  {name: "夕", start_time: "14:00", end_time: "18:00"},
+  {name: "夜", start_time: "18:00", end_time: "22:00"}
 ]
 time_zone = ActiveSupport::TimeZone.new("Tokyo")  # <- ここを追加
 time_slot_definitions.each do |definition|

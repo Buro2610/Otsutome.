@@ -1,0 +1,45 @@
+<% provide(:title, "AdminShift") %>
+<div class="my-container">
+  <div class="toppage">
+    <h1 class="top">シフト管理</h1>
+  </div>
+  <button id="show-possible" class="btn btn-secondary">登録済みor未登録</button>
+  <%= week_calendar events: @shift_preferences do |date| %>
+    <% TimeSlot.all.each do |time_slot| %>
+      <div class="timeslot-section" data-timeslot="<%= time_slot.name %>">
+        <h2 class="my-class"><%= "#{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></h2>
+        <% User.all.each do |user| %>
+          <% shift_preference = ShiftPreference.find_by(user: user, date: date, time_slot: time_slot) %>
+          <% link_class = if shift_preference
+                             shift_during_timeslot?(user, date, time_slot) ? "btn btn-sm btn-info" : "btn btn-sm btn-warning"
+                           else
+                             "btn btn-sm btn-danger"
+                           end %>
+          <div class="shift-preference" style="color: <%= shift_preference&.preference_level&.color&.name || 'red' %>;">
+            <div style="display: flex; align-items: center;">
+              <% if shift_on_date?(user, date) %>
+                <% shift = user.shifts.where('DATE(start_time) <= :date AND DATE(end_time) >= :date', date: date).first %>
+                <%= link_to edit_user_shift_path(user, shift), class: "shift-link #{link_class}" do %>
+                  <%= "#{user.name} (#{shift.start_time.strftime('%H:%M')}~#{shift.end_time.strftime('%H:%M')})" %>
+                <% end %>
+              <% else %>
+                <%= link_to new_user_shift_path(user, date: date, start_time: time_slot.start_time, end_time: time_slot.end_time), class: "shift-link #{link_class}" do %>
+                  <%= user.name %>
+                <% end %>
+                <span class="preference-level-name">
+                  <%= shift_preference ? " #{shift_preference.preference_level.name}" : '未回答' %>
+                </span>
+              <% end %>
+              <% unless !has_possible_task?(user, date) %>
+                <span style="color: black;">★</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+
+
