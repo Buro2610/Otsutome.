@@ -1,16 +1,16 @@
 module ShiftPreferencesHelper
-  def percentage_of_day(start_time, end_time)
-    total_minutes = 24 * 60.0
-    duration_minutes = ((end_time - start_time) / 60) % total_minutes
+  def percentage_of_time_range(start_time, end_time, range_start, range_end)
+    total_minutes = ((range_end.in_time_zone("Tokyo") - range_start.in_time_zone("Tokyo")) / 60) % (24 * 60)
+    duration_minutes = ((end_time.in_time_zone("Tokyo") - start_time.in_time_zone("Tokyo")) / 60) % (24 * 60)
     (duration_minutes / total_minutes * 100).round(2)
   end
 
-
-  def percentage_of_day_for_time(time)
-    total_minutes = 24 * 60.0
-    minutes_since_midnight = time.hour * 60 + time.min
-    (minutes_since_midnight / total_minutes * 100).round(2)
+  def percentage_of_day_for_time_in_range(time, range_start, range_end)
+    total_minutes = ((range_end.in_time_zone("Tokyo") - range_start.in_time_zone("Tokyo")) / 60) % (24 * 60)
+    minutes_since_start = ((time.in_time_zone("Tokyo") - range_start.in_time_zone("Tokyo")) / 60) % (24 * 60)
+    (minutes_since_start / total_minutes * 100).round(2)
   end
+
 
   def percentage_of_time_range(start_time, end_time, range_start, range_end)
     total_minutes = ((range_end - range_start) / 60) % (24 * 60)
