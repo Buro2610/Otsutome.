@@ -2,7 +2,33 @@
 
 <%= form_with model: [@user, @shift], local: true do |f| %>
   <%= render 'shared/error_messages', object: @shift %>
-  <h1>新規シフト登録</h1>
+  <h1><%= @user.name %>の新規シフト登録</h1>
+
+<% range_start = TimeSlot.minimum(:start_time) %>
+<% range_end = TimeSlot.maximum(:end_time) %>
+
+<% TimeSlot.all.each do |time_slot| %>
+  <% shift_preference = @user.shift_preferences.find_by(date: @default_date, time_slot: time_slot) %>
+  <% if shift_preference %>
+    <div class="shift-bar panel panel-default"
+         style="margin-left: <%= percentage_of_day_for_time_in_range(shift_preference.start_time, range_start, range_end) %>%;
+                width: <%= percentage_of_time_range(shift_preference.start_time, shift_preference.end_time, range_start, range_end) %>%;
+                background-color: <%= shift_preference.preference_level.color.name %>;
+                color: white;">
+      <p><%= shift_preference.time_slot.name %> (<%= shift_preference.start_time.strftime('%H:%M') %> ~ <%= shift_preference.end_time.strftime('%H:%M') %>): <%= shift_preference.preference_level.name %></p>
+    </div>
+  <% else %>
+    <div class="shift-bar panel panel-default"
+         style="margin-left: <%= percentage_of_day_for_time_in_range(time_slot.start_time, range_start, range_end) %>%;
+                width: <%= percentage_of_time_range(time_slot.start_time, time_slot.end_time, range_start, range_end) %>%;
+                background-color: grey;
+                color: white;">
+      <p><%= time_slot.name %> (<%= time_slot.start_time.strftime('%H:%M') %> ~ <%= time_slot.end_time.strftime('%H:%M') %>): 未回答</p>
+    </div>
+  <% end %>
+<% end %>
+
+
 
   <table class="table table-borderless">
     <div class="date">
