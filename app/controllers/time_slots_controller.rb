@@ -36,10 +36,15 @@ class TimeSlotsController < ApplicationController
     redirect_to tasks_path
   end
 
+  def update_order
+    @time_slot.update(time_slot_params)
+    render body: nil
+  end
+
   private
 
   def time_slot_params
-    params.require(:time_slot).permit(:name, :start_time, :end_time)
+    params.require(:time_slot).permit(:name, :start_time, :end_time, :order)
   end
 
   def set_time_slot

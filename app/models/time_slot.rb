@@ -10,7 +10,8 @@ class TimeSlot < ApplicationRecord
   # 開始時間が終了時間よりも前であること
   validate :start_time_before_end_time
 
-
+  # 並び順order列に基づく(昇順)
+  default_scope { order(order: :asc) }
 
   private
 

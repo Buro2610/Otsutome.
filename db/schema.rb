@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_27_154701) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_03_044510) do
   create_table "colors", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_154701) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "color_id", null: false
+    t.integer "order"
     t.index ["color_id"], name: "index_preference_levels_on_color_id"
     t.index ["name"], name: "index_preference_levels_on_name", unique: true
   end
@@ -70,6 +71,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_154701) do
     t.time "end_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "order"
     t.index ["name"], name: "index_time_slots_on_name", unique: true
   end
 

@@ -19,8 +19,14 @@ Rails.application.routes.draw do
 
   get '/shifts', to: 'static_pages#home'
 
-  resources :time_slots, only: [:create, :update, :destroy, :edit]
-  resources :preference_levels, only: [:create, :update, :destroy, :edit]
+  resources :time_slots, only: [:create, :update, :destroy, :edit] do
+    patch :update_order, on: :member
+  end
+
+  resources :preference_levels, only: [:create, :update, :destroy, :edit] do
+    patch :update_order, on: :member
+  end
+
 
   get 'shift_preferences/new'
   get "/shift_preferences/admin", to: "shift_preferences#adminindex"
@@ -31,6 +37,7 @@ Rails.application.routes.draw do
       get :datatable
     end
   end
+
 
 end
 

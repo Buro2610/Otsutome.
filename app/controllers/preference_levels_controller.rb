@@ -36,6 +36,12 @@ class PreferenceLevelsController < ApplicationController
     redirect_to tasks_path
   end
 
+
+  def update_order
+    @preference_level.update(order: params[:order])
+    head :ok
+  end
+
   private
 
   def preference_level_params

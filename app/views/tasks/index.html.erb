@@ -44,16 +44,16 @@
         <th scope="col">削除</th>
       </tr>
     </thead>
-    <tbody>
-      <% @time_slots.each do |time_slot| %>
-        <tr>
-          <td><%= "#{time_slot.name}" %></td>
-          <td><%= "#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')}" %></td>
-          <td><button class="btn btn-secondary"><%= link_to "編集", edit_time_slot_path(time_slot), class: "btn btn-secondary" %></button></td>
-          <td><a href="#" class="btn btn-danger delete-time-slot" data-url="/time_slots/<%= time_slot.id %>" data-redirect="/tasks">削除</a></td>
-        </tr>
-      <% end %>
-    </tbody>
+  <tbody id="sortable-timeslots">
+    <% @time_slots.each do |time_slot| %>
+      <tr id="time-slot-<%= time_slot.id %>" data-url="<%= update_order_time_slot_path(time_slot) %>">
+        <td><%= "#{time_slot.name}" %></td>
+        <td><%= "#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')}" %></td>
+        <td><button class="btn btn-secondary"><%= link_to "編集", edit_time_slot_path(time_slot), class: "btn btn-secondary" %></button></td>
+        <td><a href="#" class="btn btn-danger delete-time-slot" data-url="/time_slots/<%= time_slot.id %>" data-redirect="/tasks">削除</a></td>
+      </tr>
+    <% end %>
+  </tbody>
   </table>
   <%= form_with(model: TimeSlot.new, local: true) do |f| %>
     <%= f.label :name, "志望時間" %>
@@ -83,12 +83,12 @@
           <th scope="col">削除</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="sortable-preferencelevels">
         <% @preference_levels.each do |preference_level| %>
-          <tr>
+          <tr id="preference-level-<%= preference_level.id %>" data-url="<%= update_order_preference_level_path(preference_level) %>">
             <td>
               <% color = Color.find(preference_level.color_id).name %>
-              <div class="preference-level-<%= preference_level.id %>" style="background-color: <%= color %>;"><br></div>
+              <div style="background-color: <%= color %>;"><br></div>
             </td>
             <td><%= preference_level.name.presence || '未設定' %></td>
             <td><button class="btn btn-secondary"><%= link_to "編集", edit_preference_level_path(preference_level), class: "btn btn-secondary" %></button></td>
@@ -164,7 +164,11 @@
       }
     });
   });
+
+
+
 </script>
+
 
 
 
