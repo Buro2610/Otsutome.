@@ -36,10 +36,19 @@ class TimeSlotsController < ApplicationController
     redirect_to tasks_path
   end
 
+  def update_order
+    params[:order].split(',').each_with_index do |id, index|
+      TimeSlot.where(id: id.gsub('time-slot-', '')).update_all(order: index + 1)
+    end
+    head :ok  # this is a response to Ajax request
+  end
+
+
+
   private
 
   def time_slot_params
-    params.require(:time_slot).permit(:name, :start_time, :end_time)
+    params.require(:time_slot).permit(:name, :start_time, :end_time, :order)
   end
 
   def set_time_slot

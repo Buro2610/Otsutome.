@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   resources :users do
     resources :shifts,except: [:show]
   end
-  resources :tasks,except: %i[show]
+  resources :tasks,except: %i[show] do
+    put :update_order, on: :collection  # changed from :member to :collection
+  end
 
   #以下、otsutome.
 
@@ -19,8 +21,15 @@ Rails.application.routes.draw do
 
   get '/shifts', to: 'static_pages#home'
 
-  resources :time_slots, only: [:create, :update, :destroy, :edit]
-  resources :preference_levels, only: [:create, :update, :destroy, :edit]
+
+  resources :preference_levels, only: [:create, :update, :destroy, :edit] do
+    put :update_order, on: :collection  # changed from :member to :collection
+  end
+
+  resources :time_slots, only: [:create, :update, :destroy, :edit] do
+    put :update_order, on: :collection  # changed from :member to :collection
+  end
+
 
   get 'shift_preferences/new'
   get "/shift_preferences/admin", to: "shift_preferences#adminindex"
@@ -31,6 +40,7 @@ Rails.application.routes.draw do
       get :datatable
     end
   end
+
 
 end
 

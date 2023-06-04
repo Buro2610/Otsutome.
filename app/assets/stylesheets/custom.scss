@@ -1,6 +1,10 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+@import "simple_calendar";
+@import "font-awesome";
+@import "jquery-ui";
+
 
 
 
@@ -166,6 +170,16 @@ footer {
   background-color: $gray-lighter;
   padding: 2px;
 }
+
+/*sortable関連*/
+
+// .ui-sortable-handle {
+//   -webkit-user-select: none;
+//   -moz-user-select: none;
+//   -ms-user-select: none;
+//   user-select: none;
+// }
+
 
 /* ガントチャート*/
 

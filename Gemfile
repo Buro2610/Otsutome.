@@ -7,6 +7,8 @@ gem "faker",           "2.21.0"
 gem "simple_calendar", "~>2.0"
 gem 'jquery-rails'
 gem "jquery-datatables-rails"
+gem 'jquery-ui-rails'
+gem 'ranked-model'
 
 gem "will_paginate",           "3.3.1"
 gem "bootstrap-will_paginate", "1.0.0"

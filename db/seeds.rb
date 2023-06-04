@@ -65,7 +65,7 @@ preference_level_names = ["可能", "多分可能", "多分不可", "不可","�
 
 # preference_levelsの初期データを追加
 preference_level_names.each_with_index do |name, index|
-  PreferenceLevel.create!(name: name, color_id: color_objects[index].id)
+  PreferenceLevel.create!(name: name, color_id: color_objects[index].id, order: index)
 end
 
 
@@ -77,11 +77,12 @@ time_slot_definitions = [
   {name: "夜", start_time: "18:00", end_time: "22:00"}
 ]
 time_zone = ActiveSupport::TimeZone.new("Tokyo")  # <- ここを追加
-time_slot_definitions.each do |definition|
+time_slot_definitions.each_with_index do |definition, index|
   TimeSlot.create!(
     name: definition[:name],
     start_time: time_zone.parse(definition[:start_time]),
-    end_time: time_zone.parse(definition[:end_time])
+    end_time: time_zone.parse(definition[:end_time]),
+    order: index
   )
 end
 

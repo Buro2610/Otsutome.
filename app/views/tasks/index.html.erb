@@ -2,7 +2,6 @@
 
 <div class="container">
   <h1 class="top">設定管理</h1>
-
   <!-- 業務の追加or削除 -->
   <h2 class="my-class">業務設定</h2>
   <table class="table">
@@ -11,8 +10,7 @@
         <th scope="col">業務名</th>
         <th scope="col">削除</th>
       </tr>
-    </thead>
-    <tbody>
+    <tbody id="sortable-tasks">
       <% if @tasks.empty? %>
         <tr>
           <td colspan="2">業務が設定されていません</td>
@@ -21,7 +19,7 @@
         <% @tasks.each do |task| %>
           <tr>
             <td><%= task.name %></td>
-            <td><a data-confirm="削除しますか？" rel="nofollow" data-method="delete" href="/tasks/<%= task.id %>" class="delete-btn btn btn-danger" data-url="/tasks/<%= task.id %>" data-redirect="/tasks">削除</a></td>
+            <td><a href="#" class="delete-btn btn btn-danger" data-url="/tasks/<%= task.id %>" data-redirect="/tasks">削除</a></td>
           </tr>
         <% end %>
       <% end %>
@@ -32,7 +30,6 @@
     <%= f.text_field :name, class: 'form-control' %>
     <%= f.submit "業務を追加", class: "btn btn-primary" %>
   <% end %>
-
   <!-- タイムスロットの編集 -->
   <h2 class="my-class">時間帯設定</h2>
   <table class="table">
@@ -44,33 +41,29 @@
         <th scope="col">削除</th>
       </tr>
     </thead>
-    <tbody>
-      <% @time_slots.each do |time_slot| %>
-        <tr>
-          <td><%= "#{time_slot.name}" %></td>
-          <td><%= "#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')}" %></td>
-          <td><button class="btn btn-secondary"><%= link_to "編集", edit_time_slot_path(time_slot), class: "btn btn-secondary" %></button></td>
-          <td><a href="#" class="btn btn-danger delete-time-slot" data-url="/time_slots/<%= time_slot.id %>" data-redirect="/tasks">削除</a></td>
-        </tr>
-      <% end %>
-    </tbody>
+  <tbody id="sortable-timeslots">
+    <% @time_slots.each do |time_slot| %>
+      <tr id="time-slot-<%= time_slot.id %>" data-url="<%= update_order_time_slots_path %>">
+        <td><%= "#{time_slot.name}" %></td>
+        <td><%= "#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')}" %></td>
+        <td><button class="btn btn-secondary"><%= link_to "編集", edit_time_slot_path(time_slot), class: "btn btn-secondary" %></button></td>
+        <td><a href="#" class="btn btn-danger delete-time-slot" data-url="/time_slots/<%= time_slot.id %>" data-redirect="/tasks">削除</a></td>
+      </tr>
+    <% end %>
+  </tbody>
   </table>
-  <%= form_with(model: TimeSlot.new, local: true) do |f| %>
-    <%= f.label :name, "志望時間" %>
-    <%= f.text_field :name, class: 'form-control' %>
+    <%= form_with(model: TimeSlot.new, local: true) do |f| %>
+      <%= f.label :start_time, "開始時間" %>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:start_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
+        </div>
 
-    <%= f.label :start_time, "開始時間" %>
-    <div class="time_select">
-      <%= raw sprintf(f.time_select(:start_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
-    </div>
-
-    <%= f.label :end_time, "終了時間" %>
-    <div class="time_select">
-      <%= raw sprintf(f.time_select(:end_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
-    </div>
-
-    <%= f.submit "時間割の追加", class: "btn btn-primary" %>
-  <% end %>
+        <%= f.label :end_time, "終了時間" %>
+        <div class="time_select">
+          <%= raw sprintf(f.time_select(:end_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>
+        </div>
+      <%= f.submit "時間割の追加", class: "btn btn-primary" %>
+    <% end %>
   <!-- シフト希望度の編集 -->
   <h2 class="my-class">シフト希望度設定</h2>
   <div class="container">
@@ -83,12 +76,12 @@
           <th scope="col">削除</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="sortable-preferencelevels">
         <% @preference_levels.each do |preference_level| %>
-          <tr>
+          <tr id="preference-level-<%= preference_level.id %>" data-url="<%= update_order_preference_levels_path %>">
             <td>
               <% color = Color.find(preference_level.color_id).name %>
-              <div class="preference-level-<%= preference_level.id %>" style="background-color: <%= color %>;"><br></div>
+              <div style="background-color: <%= color %>;"><br></div>
             </td>
             <td><%= preference_level.name.presence || '未設定' %></td>
             <td><button class="btn btn-secondary"><%= link_to "編集", edit_preference_level_path(preference_level), class: "btn btn-secondary" %></button></td>
@@ -110,7 +103,49 @@
   </div>
 </div>
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
 <script>
+
+   // Make preference levels and timeslots sortable
+  $(function() {
+    $("#sortable-tasks, #sortable-preferencelevels, #sortable-timeslots").sortable({
+      update: function(event, ui) {
+        var newOrder = $(this).sortable('toArray').toString();
+        var url;
+        switch(event.target.id) {
+          case 'sortable-preferencelevels':
+            url = '/preference_levels/update_order';
+            break;
+          case 'sortable-timeslots':
+            url = '/time_slots/update_order';
+            break;
+          case 'sortable-tasks':
+            url = '/tasks/update_order';
+            break;
+        }
+
+        if(url) {
+          $.ajax({
+            url: url,
+            method: 'PUT',
+            data: { order: newOrder },
+            headers: {
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            },
+            success: function() {
+              console.log("Order updated");
+            }
+          });
+        }
+      }
+    });
+  });
+
+
+
   // Delete handler for task
   document.querySelectorAll('.delete-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
@@ -164,8 +199,8 @@
       }
     });
   });
+
+
+
 </script>
-
-
-
 
