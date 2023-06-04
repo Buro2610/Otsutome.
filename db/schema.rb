@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_03_044510) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_04_060705) do
   create_table "colors", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_044510) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "order"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 

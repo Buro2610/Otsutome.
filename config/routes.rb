@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   resources :users do
     resources :shifts,except: [:show]
   end
-  resources :tasks,except: %i[show]
+  resources :tasks,except: %i[show] do
+    put :update_order, on: :collection  # changed from :member to :collection
+  end
 
   #以下、otsutome.
 
@@ -19,12 +21,13 @@ Rails.application.routes.draw do
 
   get '/shifts', to: 'static_pages#home'
 
-  resources :time_slots, only: [:create, :update, :destroy, :edit] do
-    patch :update_order, on: :member
-  end
 
   resources :preference_levels, only: [:create, :update, :destroy, :edit] do
-    patch :update_order, on: :member
+    put :update_order, on: :collection  # changed from :member to :collection
+  end
+
+  resources :time_slots, only: [:create, :update, :destroy, :edit] do
+    put :update_order, on: :collection  # changed from :member to :collection
   end
 
 

@@ -37,9 +37,13 @@ class PreferenceLevelsController < ApplicationController
   end
 
 
+  # in preference_levels_controller.rb and time_slots_controller.rb
   def update_order
-    @preference_level.update(order: params[:order])
-    head :ok
+    params[:order].each_with_index do |id, index|
+      PreferenceLevel.where(id: id).update_all(order: index + 1)
+      # or TimeSlot.where(id: id).update_all(order: index + 1) for TimeSlotsController
+    end
+    head :ok  # this is a response to Ajax request
   end
 
   private
