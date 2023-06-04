@@ -26,14 +26,17 @@ class TasksController < ApplicationController
     redirect_to tasks_path
   end
 
-    # in preference_levels_controller.rb and time_slots_controller.rb
+  # in TasksController
   def update_order
-    params[:order].each_with_index do |id, index|
-      Task.where(id: id).update_all(order: index + 1)
-      # or TimeSlot.where(id: id).update_all(order: index + 1) for TimeSlotsController
+
+    puts params[:order]
+
+    params[:order].split(',').each_with_index do |id, index|
+      Task.where(id: id.gsub('task-', '')).update_all(order: index + 1)
     end
     head :ok  # this is a response to Ajax request
   end
+
 
   private
 
