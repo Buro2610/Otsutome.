@@ -8,6 +8,7 @@ class PreferenceLevel < ApplicationRecord
   # 名前が存在すること
   validates :name, presence: true, uniqueness: true
   validates :color_id, presence: true
+  validates :order, presence: true
 
 
 end

@@ -6,6 +6,7 @@ class TimeSlot < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validates :order, presence: true
 
   validate :start_time_before_end_time
 

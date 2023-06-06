@@ -21,6 +21,8 @@ class TimeSlotsController < ApplicationController
 
   def create
     @time_slot = TimeSlot.new(time_slot_params)
+    @time_slot.order = TimeSlot.maximum(:order).to_i + 1
+
     if @time_slot.save
       flash[:success] = "新しい時間割を作成しました"
       redirect_to tasks_path
@@ -29,6 +31,7 @@ class TimeSlotsController < ApplicationController
       redirect_to tasks_path
     end
   end
+
 
   def destroy
     @time_slot.destroy
