@@ -21,6 +21,8 @@ class PreferenceLevelsController < ApplicationController
 
   def create
     @preference_level = PreferenceLevel.new(preference_level_params)
+    @preference_level.order = PreferenceLevel.maximum(:order).to_i + 1
+
     if @preference_level.save
       flash[:success] = "新しい希望度の項目を作成しました"
       redirect_to tasks_path
@@ -29,6 +31,7 @@ class PreferenceLevelsController < ApplicationController
       redirect_to tasks_path
     end
   end
+
 
   def destroy
     @preference_level.destroy

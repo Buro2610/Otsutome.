@@ -57,6 +57,8 @@
   </tbody>
   </table>
     <%= form_with(model: TimeSlot.new, local: true) do |f| %>
+      <%= f.label :name, "時間割名" %>
+      <%= f.text_field :name, class: 'form-control' %>
       <%= f.label :start_time, "開始時間" %>
         <div class="time_select">
           <%= raw sprintf(f.time_select(:start_time, with_css_classes: true, minute_step: 10, time_separator: "%s"), "時 ") + "分" %>

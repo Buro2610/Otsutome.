@@ -4,10 +4,7 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: :destroy
 
   def index
-    @users = User.includes(:micro_posts => :task).paginate(page: params[:page])
-    @users.each do |user|
-      user.micro_posts.sort_by! { |mp| mp.task.order }
-    end
+    @users = User.paginate(page: params[:page])
   end
 
   def show
