@@ -1,5 +1,9 @@
 <% provide(:title, "AdminCalendar") %>
 
+<% content_for :head do %>
+  <meta name="turbolinks-visit-control" content="reload">
+<% end %>
+
 <div class="container">
   <h1 class="top">設定管理</h1>
   <!-- 業務の追加or削除 -->
@@ -17,7 +21,7 @@
         </tr>
       <% else %>
         <% @tasks.each do |task| %>
-          <tr>
+          <tr id="task-<%= task.id %>" data-url="<%= update_order_tasks_path %>">
             <td><%= task.name %></td>
             <td><a href="#" class="delete-btn btn btn-danger" data-url="/tasks/<%= task.id %>" data-redirect="/tasks">削除</a></td>
           </tr>

@@ -9,8 +9,7 @@
     <div class="col-md-16">
       <%= month_calendar events: @shift_preferences do |date, shift_preferences| %>
         <%= date.day %>
-
-        <% shift_preferences.each do |shift_preference| %>
+        <% shift_preferences.sort_by { |sp| sp.time_slot.order }.each do |shift_preference| %>
           <div>
             <% if shift_preference %>
               <%= "#{shift_preference.time_slot.name} (#{shift_preference.preference_level.name})" %>

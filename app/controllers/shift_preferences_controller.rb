@@ -2,7 +2,7 @@ class ShiftPreferencesController < ApplicationController
   before_action :set_shift_preference, only: [:edit, :update, :destroy]
 
   def index
-    @shift_preferences = current_user.shift_preferences
+    @shift_preferences = current_user.shift_preferences.includes(:time_slot)
   end
 
   def adminindex
@@ -12,21 +12,22 @@ class ShiftPreferencesController < ApplicationController
 
   def adminshift
     @shift_preferences = ShiftPreference.all
+    @time_slots = TimeSlot.order(:order) # 'order'カラムで並び替え
+    @users = User.order(:name) # ここでは'name'カラムで並び替えていますが、適切なカラム名に変更してください。
   end
 
 
   def new
-    @time_slots = TimeSlot.all
+    @time_slots = TimeSlot.order('"time_slots"."order"')
     @shift_preferences = @time_slots.map do |time_slot|
       date = params[:default_date].present? ? params[:default_date].to_date : Date.today
       start_time = date.to_time.change({ hour: time_slot.start_time.hour, min: time_slot.start_time.min })
       end_time = date.to_time.change({ hour: time_slot.end_time.hour, min: time_slot.end_time.min })
       current_user.shift_preferences.build(time_slot: time_slot, start_time: start_time, end_time: end_time, date: date)
     end
-    @preference_level_names = PreferenceLevel.pluck(:name)
-    @preference_levels = PreferenceLevel.all
+    @preference_level_names = PreferenceLevel.order(:order).pluck(:name)
+    @preference_levels = PreferenceLevel.order(:order)
   end
-
 
 
 
@@ -44,16 +45,16 @@ class ShiftPreferencesController < ApplicationController
         end_time: end_time,
         preference_level_id: sp_params[:preference_level_id]
       )
-    end
+    end.sort_by { |sp| sp.time_slot.order }
 
     if @shift_preferences.all?(&:valid?)
       @shift_preferences.each(&:save!)
       flash[:success] = "希望時間が作成されました！"
       redirect_to shift_preferences_path
     else
-      @time_slots = TimeSlot.all
+      @time_slots = TimeSlot.order(:order)
       @preference_level_names = PreferenceLevel.pluck(:name)
-      @preference_levels = PreferenceLevel.all
+      @preference_levels = PreferenceLevel.order(:order)
 
       flash.now[:alert] = @shift_preferences.map { |sp| sp.errors.full_messages }.flatten.join(", ")
 
