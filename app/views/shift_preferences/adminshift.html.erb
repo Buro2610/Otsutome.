@@ -5,10 +5,10 @@
   </div>
   <button id="show-possible" class="btn btn-secondary">登録済みor未登録</button>
   <%= week_calendar events: @shift_preferences do |date| %>
-    <% TimeSlot.all.each do |time_slot| %>
+    <% @time_slots.each do |time_slot| %>
       <div class="timeslot-section" data-timeslot="<%= time_slot.name %>">
         <h2 class="my-class"><%= "#{time_slot.name} (#{time_slot.start_time.strftime('%H:%M')} ～ #{time_slot.end_time.strftime('%H:%M')})" %></h2>
-        <% User.all.each do |user| %>
+        <% @users.each do |user| %>
           <% shift_preference = ShiftPreference.find_by(user: user, date: date, time_slot: time_slot) %>
           <% link_class = if shift_preference
                              shift_during_timeslot?(user, date, time_slot) ? "btn btn-sm btn-info" : "btn btn-sm btn-warning"
@@ -40,6 +40,7 @@
     <% end %>
   <% end %>
 </div>
+
 
 
 

@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <%= render 'layouts/rails_default' %>
+
+    <%= yield :head %>
+
     <%= javascript_importmap_tags %>
+
+    <meta name="turbolinks-visit-control" content="reload">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
   </head>

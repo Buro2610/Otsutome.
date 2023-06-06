@@ -4,7 +4,10 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: :destroy
 
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.includes(:micro_posts => :task).paginate(page: params[:page])
+    @users.each do |user|
+      user.micro_posts.sort_by! { |mp| mp.task.order }
+    end
   end
 
   def show
@@ -29,7 +32,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @task_names = User.find_by(admin: true)&.tasks&.pluck(:name)
+    @task_names = User.find_by(admin: true)&.tasks&.order(:order)&.pluck(:name)
     @user = User.find(params[:id])
   end
 

@@ -19,8 +19,8 @@ end
 
 # 管理人のみ編集可能なカラムであるtask_name を設定
 task_names = ["オーダー", "オーブン", "パスタ", "ウォッシュ", "ドリンク"]
-task_names.each do |task_name|
-  task = Task.create!(name: task_name, user: admin_user)
+task_names.each_with_index do |task_name, index|
+  task = Task.create!(name: task_name, order: index, user: admin_user)
 end
 
 
